@@ -45,4 +45,4 @@ class loginController {
   }
 }
 
-export {loginController};
+export { loginController };
