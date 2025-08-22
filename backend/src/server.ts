@@ -12,10 +12,6 @@ app.use(cors());
 
 app.use(router);
 
-app.get("/", (req, res) => {
-  res.send("Hello, Word!");
-});
-
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
