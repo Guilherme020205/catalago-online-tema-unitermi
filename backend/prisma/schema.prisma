@@ -14,16 +14,11 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String
-  email    String   @unique
-  age      Int? // o ? dis que a informação é opcional, caso queira que seja notnull não precissa escrever ele já vem de padrão
-  balance  Float    @default(0.0)
-  isActive Boolean  @default(true)
+  id       String      @id @default(uuid())
+  user     String   @unique
+  password String
   createAt DateTime @default(now())
-  updateAt DateTime @updatedAt // @upDatedAt atualiza o registro após uma mudança nos dados
+  updateAt DateTime @updatedAt
 
-  
-  // caso queira colocar um "apelido" no nome da tabela podemos por com @@map("...")
   @@map("users")
 }
