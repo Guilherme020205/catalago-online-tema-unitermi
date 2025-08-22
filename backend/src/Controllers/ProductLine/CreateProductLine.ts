@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../../database";
 
-class ProductLineController {
+class CreateProductLine {
   async handle(req: Request, res: Response) {
     const { name } = req.body;
     try {
@@ -24,4 +24,4 @@ class ProductLineController {
   }
 }
 
-export { ProductLineController };
+export { CreateProductLine };
