@@ -13,6 +13,11 @@ import { EditColorLine } from "./Controllers/ColorLine/EditColorLine";
 import { DeleteColorLine } from "./Controllers/ColorLine/DeleteColorLine";
 import { ListColorLine } from "./Controllers/ColorLine/ListColorLine";
 
+import { CreateProductCapacity } from "./Controllers/ProductCapacity/CreateProductCapacity";
+import { EditProductCapacity } from "./Controllers/ProductCapacity/EditProductCapacity";
+import { DeleteProductCapacity } from "./Controllers/ProductCapacity/DeleteProductCapacity";
+import { ListProductCapacity } from "./Controllers/ProductCapacity/ListProductCapacity";
+
 const router = Router();
 
 router.post("/login", new loginController().handle);
@@ -26,5 +31,12 @@ router.post("/creatColorLine", authentcate, new CreateColorLine().handle);
 router.post("/editColorLine/:id", authentcate, new EditColorLine().handle);
 router.delete("/deleteColorLine/:id", authentcate, new DeleteColorLine().handle);
 router.get("/listColorLine", new ListColorLine().handle);
+
+router.post("/creatProductCapacity", authentcate, new CreateProductCapacity().handle);
+router.post("/editProductCapacity/:id", authentcate, new EditProductCapacity().handle);
+router.delete("/deleteProductCapacity/:id", authentcate, new DeleteProductCapacity().handle);
+router.get("/listProductCapacity", new ListProductCapacity().handle);
+
+
 
 export default router;
