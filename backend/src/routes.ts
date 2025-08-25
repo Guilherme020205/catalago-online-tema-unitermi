@@ -18,6 +18,11 @@ import { EditProductCapacity } from "./Controllers/ProductCapacity/EditProductCa
 import { DeleteProductCapacity } from "./Controllers/ProductCapacity/DeleteProductCapacity";
 import { ListProductCapacity } from "./Controllers/ProductCapacity/ListProductCapacity";
 
+import { CreateCategory } from "./Controllers/Category/CreateCategory";
+import { EditCategory } from "./Controllers/Category/EditCategory";
+import { DeleteCategory } from "./Controllers/Category/DeleteCategory";
+import { ListCategory } from "./Controllers/Category/ListCategory";
+
 const router = Router();
 
 router.post("/login", new loginController().handle);
@@ -37,6 +42,10 @@ router.post("/editProductCapacity/:id", authentcate, new EditProductCapacity().h
 router.delete("/deleteProductCapacity/:id", authentcate, new DeleteProductCapacity().handle);
 router.get("/listProductCapacity", new ListProductCapacity().handle);
 
+router.post("/creatCategory", authentcate, new CreateCategory().handle);
+router.post("/editCategory/:id", authentcate, new EditCategory().handle);
+router.delete("/deleteCategory/:id", authentcate, new DeleteCategory().handle);
+router.get("/listCategory", new ListCategory().handle);
 
 
 export default router;

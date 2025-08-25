@@ -31,7 +31,7 @@ class loginController {
         { id: userExist.id },
         process.env.JWT_SECRET as string,
         {
-          expiresIn: "12h",
+          expiresIn: "244h",
         }
       );
 
