@@ -23,29 +23,38 @@ import { EditCategory } from "./Controllers/Category/EditCategory";
 import { DeleteCategory } from "./Controllers/Category/DeleteCategory";
 import { ListCategory } from "./Controllers/Category/ListCategory";
 
+import { CreateProduct } from "./Controllers/Produto/CreateProduct";
+import { EditProduct } from "./Controllers/Produto/EditProduct"; 
+import { DeleteProduct } from "./Controllers/Produto/DeleteProduct";
+import { ListProduct } from "./Controllers/Produto/ListProduct";
+
 const router = Router();
 
 router.post("/login", new loginController().handle);
 
 router.post("/creatProductLine", authentcate, new CreateProductLine().handle);
-router.post("/editProductLine/:id", authentcate, new EditProductLine().handle);
+router.put("/editProductLine/:id", authentcate, new EditProductLine().handle);
 router.delete("/deleteProductLine/:id", authentcate, new DeleteProductLine().handle);
 router.get("/listProductLine", new ListProductLine().handle);
 
 router.post("/creatColorLine", authentcate, new CreateColorLine().handle);
-router.post("/editColorLine/:id", authentcate, new EditColorLine().handle);
+router.put("/editColorLine/:id", authentcate, new EditColorLine().handle);
 router.delete("/deleteColorLine/:id", authentcate, new DeleteColorLine().handle);
 router.get("/listColorLine", new ListColorLine().handle);
 
 router.post("/creatProductCapacity", authentcate, new CreateProductCapacity().handle);
-router.post("/editProductCapacity/:id", authentcate, new EditProductCapacity().handle);
+router.put("/editProductCapacity/:id", authentcate, new EditProductCapacity().handle);
 router.delete("/deleteProductCapacity/:id", authentcate, new DeleteProductCapacity().handle);
 router.get("/listProductCapacity", new ListProductCapacity().handle);
 
 router.post("/creatCategory", authentcate, new CreateCategory().handle);
-router.post("/editCategory/:id", authentcate, new EditCategory().handle);
+router.put("/editCategory/:id", authentcate, new EditCategory().handle);
 router.delete("/deleteCategory/:id", authentcate, new DeleteCategory().handle);
 router.get("/listCategory", new ListCategory().handle);
 
+router.post("/creatProduct", authentcate, new CreateProduct().handle);
+router.put("/editProduct/:id", authentcate, new EditProduct().handle);
+router.delete("/deleteProduct/:id", authentcate, new DeleteProduct().handle);
+router.get("/listProduct", new ListProduct().handle);
 
 export default router;
