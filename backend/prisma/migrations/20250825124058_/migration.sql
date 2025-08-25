@@ -1,4 +1,15 @@
 -- CreateTable
+CREATE TABLE "public"."users" (
+    "id" TEXT NOT NULL,
+    "user" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "public"."productLine" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -61,6 +72,9 @@ CREATE TABLE "public"."products" (
 
     CONSTRAINT "products_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_user_key" ON "public"."users"("user");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "productLine_name_key" ON "public"."productLine"("name");
