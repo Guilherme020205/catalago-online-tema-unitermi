@@ -26,7 +26,9 @@ import { ListCategory } from "./Controllers/Category/ListCategory";
 import { CreateProduct } from "./Controllers/Produto/CreateProduct";
 import { EditProduct } from "./Controllers/Produto/EditProduct"; 
 import { DeleteProduct } from "./Controllers/Produto/DeleteProduct";
-import { ListProduct } from "./Controllers/Produto/ListProduct";
+import { ListProducts } from "./Controllers/Produto/ListProducts"; 
+
+import { ListProduct } from "./Controllers/Produto/web/ListProduct";
 
 const router = Router();
 
@@ -55,6 +57,8 @@ router.get("/listCategory", new ListCategory().handle);
 router.post("/creatProduct", authentcate, new CreateProduct().handle);
 router.put("/editProduct/:id", authentcate, new EditProduct().handle);
 router.delete("/deleteProduct/:id", authentcate, new DeleteProduct().handle);
+router.get("/listProducts", new ListProducts().handle);
+
 router.get("/listProduct", new ListProduct().handle);
 
 export default router;

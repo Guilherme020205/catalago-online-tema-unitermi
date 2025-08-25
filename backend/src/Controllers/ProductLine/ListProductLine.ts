@@ -15,6 +15,9 @@ class ListProductLine {
           where: {
             idCategory: String(id), // sempre string
           },
+          include:{
+            Category: true
+          }
         });
       } else {
         // Se não enviou, pega todas as linhas

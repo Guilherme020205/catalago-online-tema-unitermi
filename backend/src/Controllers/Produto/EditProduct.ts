@@ -29,6 +29,12 @@ class EditProduct {
 
       const productExists = await prisma.product.findUnique({
         where: { id },
+        include: {
+          Category: true,
+          ColorLine: true,
+          ProductCapacity: true,
+          ProductLine: true
+        }
       });
 
       if (!productExists) {
