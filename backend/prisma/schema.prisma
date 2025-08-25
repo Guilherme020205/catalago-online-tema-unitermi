@@ -70,12 +70,13 @@ model Product {
   id          String @id @default(uuid())
   name        String @unique
   description String
+  
+  Category   Category? @relation(fields: [idCategory], references: [id])
+  idCategory String
 
   ProductLine   ProductLine? @relation(fields: [idProductLine], references: [id])
   idProductLine String
 
-  Category   Category? @relation(fields: [idCategory], references: [id])
-  idCategory String
 
   ColorLine   ColorLine? @relation(fields: [colorLineId], references: [id])
   colorLineId String?
