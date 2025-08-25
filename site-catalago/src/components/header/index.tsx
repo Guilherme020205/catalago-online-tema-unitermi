@@ -8,12 +8,12 @@ function Header() {
 
   const links = [
     { path: "/", label: "Inicio" },
-    { path: "/quem-somos", label: "Quem somos" },
+    { path: "/produtos", label: "Produtos" },
     { path: "/contatos", label: "Contatos" },
   ];
 
   return (
-    <div className="flex bg-red justify-between items-center px-10 py-5">
+    <div className="flex bg-web-red justify-between items-center px-10 py-5">
       <img src={slogan1} alt="slogan1" className="w-56" />
 
       <div className="flex justify-center gap-2">
@@ -23,11 +23,11 @@ function Header() {
             <button
               key={path}
               onClick={() => navigate(path)}
-              className={`font-bold text-2xl px-6 py-1 rounded-2xl mr-2 transition duration-300 cursor-pointer
+              className={`font-bold text-2xl px-6 py-1 rounded-2xl mr-2 transition duration-700 cursor-pointer
                 ${
                   isActive
-                    ? "bg-white text-red"
-                    : "text-white hover:bg-white hover:text-red"
+                    ? "bg-white text-web-red"
+                    : "text-white hover:bg-white hover:text-web-red"
                 }`}
             >
               {label}
