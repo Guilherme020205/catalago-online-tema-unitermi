@@ -7,7 +7,7 @@ class EditColorLine {
     const { name, code } = req.body;
 
     try {
-      if (!id && !name) {
+      if (!id || !name) {
         return res.status(401).json({ message: "error edit color line" });
       }
 

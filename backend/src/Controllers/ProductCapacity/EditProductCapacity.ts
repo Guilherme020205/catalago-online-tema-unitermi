@@ -7,12 +7,12 @@ class EditProductCapacity {
     const { capacity } = req.body;
 
     try {
-      if (!id && !capacity) {
+      if (!id || !capacity) {
         return res.status(401).json({ message: "error edit product Capacity" });
       }
       
       const productCapacityExist = await prisma.productCapacity.findUnique({
-        where: { Capacity: capacity },
+        where: { capacity: capacity },
       });
 
       if (productCapacityExist) {
@@ -21,7 +21,7 @@ class EditProductCapacity {
 
       const editProductCapacity = await prisma.productCapacity.update({
         where: { id: id },
-        data: { Capacity: capacity },
+        data: { capacity: capacity },
       });
 
       res

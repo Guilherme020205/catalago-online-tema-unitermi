@@ -5,12 +5,10 @@ class CreateColorLine {
   async handle(req: Request, res: Response) {
     const { name, code } = req.body;
     try {
-      if (!name) {
+      if (!name || !code) {
         return res.status(401).json({ message: "error creating product line" });
       }
-      if (!code) {
-        return res.status(401).json({ message: "error creating product line" });
-      }
+       
 
       const creatColorLine = await prisma.colorLine.create({
         data: {

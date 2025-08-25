@@ -11,7 +11,7 @@ class CreateProductCapacity {
 
       const creatProductCapacity = await prisma.productCapacity.create({
         data: {
-          Capacity: capacity
+          capacity: capacity
         },
       });
 
