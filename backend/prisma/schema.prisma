@@ -23,6 +23,18 @@ model User {
   @@map("users")
 }
 
+
+model Category {
+  id       String   @id @default(uuid())
+  name     String   @unique
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  Product Product[]
+
+  @@map("category")
+}
+
 model ProductLine {
   id       String    @id @default(uuid())
   name     String    @unique
@@ -32,18 +44,6 @@ model ProductLine {
 
   @@map("productLine")
 }
-
-model ColorLine {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  code     String
-  createAt DateTime  @default(now())
-  updateAt DateTime  @updatedAt
-  Product  Product[]
-
-  @@map("corLine")
-}
-
 model ProductCapacity {
   id       String   @id @default(uuid())
   Capacity String   @unique
@@ -55,15 +55,15 @@ model ProductCapacity {
   @@map("productCapacity")
 }
 
-model Category {
-  id       String   @id @default(uuid())
-  name     String   @unique
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+model ColorLine {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  code     String
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
+  Product  Product[]
 
-  Product Product[]
-
-  @@map("category")
+  @@map("corLine")
 }
 
 model Product {
