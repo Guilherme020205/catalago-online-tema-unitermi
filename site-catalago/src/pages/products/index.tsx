@@ -5,7 +5,7 @@ import BoxProduct from "../../components/product";
 function ScreenProducts() {
   const [categorys, setCategorys] = useState([]);
   const [products, setProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(""); // categoria selecionada
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const listCategory = async () => {
     try {
@@ -48,9 +48,11 @@ function ScreenProducts() {
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
               className={`px-5 py-0 cursor-pointer transition-all duration-700
-                ${selectedCategory === category.id 
-                  ? "bg-white text-web-red text-[20px]" 
-                  : "hover:bg-white hover:text-web-red hover:text-[20px]"}`}
+                ${
+                  selectedCategory === category.id
+                    ? "bg-white text-web-red text-[20px]"
+                    : "hover:bg-white hover:text-web-red hover:text-[20px]"
+                }`}
             >
               {category.name}
             </button>
@@ -63,6 +65,7 @@ function ScreenProducts() {
           {products.map((product: any) => (
             <BoxProduct
               key={product.id}
+              id={product.id}
               img={product.Image}
               name={product.ProductLine.name}
             />

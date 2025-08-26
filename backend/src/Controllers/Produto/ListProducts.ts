@@ -12,12 +12,13 @@ class ListProducts {
 
       const products = await prisma.product.findMany({
         where: filter,
+        distinct: ["idProductLine"], // indica que quero linhas distintas por ProductLine
         include: {
           Category: true,
           ColorLine: true,
           ProductCapacity: true,
-          ProductLine: true
-        }
+          ProductLine: true,
+        },
       });
 
       res.status(200).json({ message: "List of Products", products });
