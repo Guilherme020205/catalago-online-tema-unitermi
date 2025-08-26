@@ -1,3 +1,6 @@
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css"; // Importa o CSS
+
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -96,7 +99,9 @@ function ScreenProduct() {
     <div className="p-6">
       <div className="flex flex-col mx-52 mt-12">
         <div className="flex flex-row gap-20">
-          <img src={product.Image} alt={product.name} className="w-[500px] cursor-zoom-in" />
+          <Zoom>
+            <img src={product.Image} alt={product.name} className="w-[500px]" />
+          </Zoom>
 
           <div>
             <h1 className="text-web-red w-[45%] font-bold text-4xl mb-4">
@@ -146,19 +151,19 @@ function ScreenProduct() {
             </div>
           </div>
         </div>
-        <section>
-          <h1>Descrição: </h1>
+        <section className="flex flex-col py-10">
+          <h1 className="text-web-red font-bold text-2xl mb-5">Descrição: </h1>
           <p>Capacidade: {product.ProductCapacity.capacity}</p>
           <p>Peso: {product.Weight}</p>
           <p>Dimensões: {product.Dimensions}</p>
           <p>Material: {product.Materials}</p>
-          <p>Outras Características: {product.OtherFeatures}</p>
+          <p className="my-5">Outras Características: {product.OtherFeatures}</p>
           <p>Código: {product.Code}</p>
           <p>NCM: {product.NCM}</p>
           <p>EAN: {product.EAN}</p>
         </section>
 
-        <hr className="text-web-red w-full my-10" />
+        <hr className="text-web-red w-full" />
       </div>
     </div>
   );
