@@ -23,7 +23,7 @@ function Header() {
             <button
               key={path}
               onClick={() => navigate(path)}
-              className={`font-bold text-2xl px-6 py-1 rounded-2xl mr-2 transition duration-700 cursor-pointer
+              className={`font-bold text-[16px ] px-6 py-1 rounded-2xl mr-2 transition duration-700 cursor-pointer
                 ${
                   isActive
                     ? "bg-white text-web-red"

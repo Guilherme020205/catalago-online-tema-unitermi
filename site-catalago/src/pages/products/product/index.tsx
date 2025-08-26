@@ -96,7 +96,7 @@ function ScreenProduct() {
     <div className="p-6">
       <div className="flex flex-col mx-52 mt-12">
         <div className="flex flex-row gap-20">
-          <img src={product.Image} alt={product.name} className="w-[500px]" />
+          <img src={product.Image} alt={product.name} className="w-[500px] cursor-zoom-in" />
 
           <div>
             <h1 className="text-web-red w-[45%] font-bold text-4xl mb-4">
@@ -133,6 +133,7 @@ function ScreenProduct() {
                 </h2>
                 {colors.map((c) => (
                   <button
+                    title={c.name}
                     key={c.id}
                     className="w-8 h-8 rounded-full mr-3 mt-2 cursor-pointer"
                     style={{

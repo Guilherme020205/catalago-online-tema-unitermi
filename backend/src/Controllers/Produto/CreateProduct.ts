@@ -21,10 +21,30 @@ class CreateProduct {
     } = req.body;
 
     try {
-
-        if (!name || !description || !idCategory || !idProductLine || !Image || !colorLineId ) {
+      if (
+        !name ||
+        !description ||
+        !idCategory ||
+        !idProductLine ||
+        !Image ||
+        !colorLineId
+      ) {
         return res.status(400).json({
           message: "error creating product",
+        });
+      }
+      const existingProduct = await prisma.product.findFirst({
+        where: {
+          idCategory,
+          idProductLine,
+          colorLineId,
+          productCapacityId,
+        },
+      });
+      if (existingProduct) {
+        return res.status(400).json({
+          error:
+            "Já existe um produto com essa cor e capacidade nessa categoria e linha.",
         });
       }
 
