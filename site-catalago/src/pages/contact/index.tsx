@@ -11,9 +11,15 @@ function ScreenContact() {
       <section className="mt-20">
         <h1 className="text-2xl text-web-red font-bold">Redes sociais: </h1>
         <div className="flex flex-row gap-4 ml-5 my-5">
-          <FaFacebookSquare className="text-5xl text-[#00a4ff]" />
-          <FaInstagramSquare className="text-5xl text-[#ec4e4a]" />
-          <FaLinkedin className="text-5xl text-[#0274b3]" />
+          <a href="https://www.facebook.com/unitermioficial">
+            <FaFacebookSquare className="text-5xl text-[#00a4ff]" />
+          </a>
+          <a href="https://www.instagram.com/unitermi/">
+            <FaInstagramSquare className="text-5xl text-[#ec4e4a]" />
+          </a>
+          <a href="https://www.linkedin.com/company/unitermi/posts/?feedView=all">
+            <FaLinkedin className="text-5xl text-[#0274b3]" />
+          </a>
         </div>
         <h1 className="text-2xl text-web-red font-bold">Contatos: </h1>
         <div className="flex flex-col ml-5 my-5">
