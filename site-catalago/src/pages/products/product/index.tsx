@@ -4,7 +4,7 @@ import "react-medium-image-zoom/dist/styles.css"; // Importa o CSS
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import Suggestions from "./components/suggestions";
 interface Product {
   id: string;
   name: string;
@@ -31,23 +31,29 @@ function ScreenProduct() {
   const [selectedColorId, setSelectedColorId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+  if (!id) return;
 
-    const fetchProduct = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:3000/GetProductDetail/${id}`
-        );
-        setProduct(res.data.product);
-        setVariations(res.data.variations);
-        setSelectedColorId(res.data.product.ColorLine?.id || null);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  // limpa os dados para forçar recarregar
+  setProduct(null);
+  setVariations([]);
+  setSelectedColorId(null);
 
-    fetchProduct();
-  }, [id]);
+  const fetchProduct = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/GetProductDetail/${id}`
+      );
+      setProduct(res.data.product);
+      setVariations(res.data.variations);
+      setSelectedColorId(res.data.product.ColorLine?.id || null);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchProduct();
+}, [id]);
+
 
   if (!product) return <p>Carregando...</p>;
 
@@ -157,13 +163,25 @@ function ScreenProduct() {
           <p>Peso: {product.Weight}</p>
           <p>Dimensões: {product.Dimensions}</p>
           <p>Material: {product.Materials}</p>
-          <p className="my-5">Outras Características: {product.OtherFeatures}</p>
+          <p className="my-5">
+            Outras Características: {product.OtherFeatures}
+          </p>
           <p>Código: {product.Code}</p>
           <p>NCM: {product.NCM}</p>
           <p>EAN: {product.EAN}</p>
         </section>
 
         <hr className="text-web-red w-full" />
+      </div>
+      <div className="flex flex-col gap-10 my-20 mx-80">
+        <div className="flex flex-col gap-2">
+          <p className="text-web-red font-bold text-2xl mb-5">Relacionados:</p>
+          <Suggestions categoryId={product.Category.id} />
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="text-web-red font-bold text-2xl mb-5">Outros:</p>
+          <Suggestions categoryId="" />
+        </div>
       </div>
     </div>
   );

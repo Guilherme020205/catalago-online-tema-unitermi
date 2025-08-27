@@ -28,7 +28,7 @@ import { EditProduct } from "./Controllers/Produto/EditProduct";
 import { DeleteProduct } from "./Controllers/Produto/DeleteProduct";
 import { ListProducts } from "./Controllers/Produto/ListProducts"; 
 
-import { ListProduct } from "./Controllers/Produto/web/ListProduct";
+import { ListProductsSuggestions } from "./Controllers/Produto/web/ListProductsSuggestions";
 import { GetProductDetail } from "./Controllers/Produto/web/GetProductDetail";
 
 const router = Router();
@@ -60,7 +60,7 @@ router.put("/editProduct/:id", authentcate, new EditProduct().handle);
 router.delete("/deleteProduct/:id", authentcate, new DeleteProduct().handle);
 router.get("/listProducts", new ListProducts().handle);
 
-// router.get("/listProduct", new ListProduct().handle);
+router.get("/listProductsSuggestions", new ListProductsSuggestions().handle);
 router.get("/GetProductDetail/:id", new GetProductDetail().handle);
 
 export default router;

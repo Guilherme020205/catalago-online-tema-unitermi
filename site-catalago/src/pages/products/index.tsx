@@ -75,17 +75,21 @@ function ScreenProducts() {
       </div>
 
       {/* produtos */}
-      <div className="flex justify-center mt-12">
-        <ul className="grid grid-cols-4 gap-20">
-          {products.map((product: any) => (
-            <BoxProduct
-              key={product.id}
-              id={product.id}
-              img={product.Image}
-              name={product.ProductLine.name}
-            />
-          ))}
-        </ul>
+      <div className="flex justify-center mt-12 min-h-[500px]">
+        {products.length === 0 ? (
+          <p className="flex text-center w-96">Pedimos desculpas, mas não encontramos produtos cadastrados nessa categori...</p>
+        ) : (
+          <ul className="grid grid-cols-4 gap-20">
+            {products.map((product: any) => (
+              <BoxProduct
+                key={product.id}
+                id={product.id}
+                img={product.Image}
+                name={product.ProductLine.name}
+              />
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* paginação */}
@@ -99,7 +103,8 @@ function ScreenProducts() {
         </button>
 
         <span>
-          Página <strong>{page}</strong> de <strong>{pagination.totalPages}</strong>
+          Página <strong>{page}</strong> de{" "}
+          <strong>{pagination.totalPages}</strong>
         </span>
 
         <button
