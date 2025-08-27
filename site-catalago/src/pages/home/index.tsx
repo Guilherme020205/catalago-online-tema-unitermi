@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import { IoBagHandle } from "react-icons/io5";
 
-import About from "./components/About";
+import About from "./components/about";
 import Carrossel from "./components/carrossel";
 import logo from "../../assets/6Uu1ixeg.png";
 import WhoWeAre from './components/whoWeAre';

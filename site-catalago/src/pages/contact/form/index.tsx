@@ -1,5 +1,7 @@
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
+import ReCAPTCHA from "react-google-recaptcha";
+import "./FormContact.css"; // Aqui você mantém seu CSS normal
 
 function FormContact() {
   const [name, setName] = useState("");
@@ -10,9 +12,16 @@ function FormContact() {
   const [cidade, setCidade] = useState("");
   const [subject, setSubject] = useState("");
   const [mensagem, setMensagem] = useState("");
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
   function sendEmail(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (!captchaValue) {
+      alert("Por favor, confirme o reCAPTCHA");
+      return;
+    }
+
     if (name === "" || email === "") {
       alert("Preencha todos os campos");
       return;
@@ -23,14 +32,14 @@ function FormContact() {
     }
 
     const templateParams = {
-      name: name,
-      email: email,
-      tel: tel,
+      name,
+      email,
+      tel,
       CNPJ: cnpj,
       UF: uf,
       Cidade: cidade,
-      subject: subject,
-      mensagem: mensagem,
+      subject,
+      mensagem,
     };
 
     emailjs
@@ -51,6 +60,7 @@ function FormContact() {
           setCidade("");
           setSubject("");
           setMensagem("");
+          setCaptchaValue(null);
         },
         (err) => {
           console.log(err);
@@ -59,71 +69,114 @@ function FormContact() {
   }
 
   return (
-    <div className="container">
-      <h1 className="title">Contato</h1>
+    <div className="flex flex-col border-1 border-web-red px-10 pt-10 pb-10 w-[500px]">
+      <h1 className="text-2xl text-web-red font-bold mb-5">Entre em Contato</h1>
 
-      <form
-        className="flex flex-col items-center "
-        onSubmit={(e) => sendEmail(e)}
-      >
-        <input
-          className="input"
-          type="text"
-          placeholder="Digite seu nome"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-        />
-        <input
-          className="input"
-          type="text"
-          placeholder="Digite seu email"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
-        <input
-          className="input"
-          type="text"
-          placeholder="Digite seu telefone"
-          onChange={(e) => setTel(e.target.value)}
-          value={tel}
-        />
-        <input
-          className="input"
-          type="text"
-          placeholder="Digite seu CNPJ"
-          onChange={(e) => setCnpj(e.target.value)}
-          value={cnpj}
-        />
-        <input
-          className="input"
-          type="text"
-          placeholder="Digite seu UF"
-          onChange={(e) => setUf(e.target.value)}
-          value={uf}
-        />
-        <input
-          className="input"
-          type="text"
-          placeholder="Digite seu cidade"
-          onChange={(e) => setCidade(e.target.value)}
-          value={cidade}
-        />
-        <input
-          className="input"
-          type="text"
-          placeholder="Digite seu subject"
-          onChange={(e) => setSubject(e.target.value)}
-          value={subject}
-        />
-        <input
-          className="input"
-          type="text"
-          placeholder="Digite seu mensagem"
-          onChange={(e) => setMensagem(e.target.value)}
-          value={mensagem}
+      <form onSubmit={sendEmail}>
+        <div className="inputGroup ">
+          <input
+            id="name"
+            type="text"
+            required
+            autoComplete="off"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <label htmlFor="name">Name</label>
+        </div>
+
+        <div className="inputGroup ">
+          <input
+            id="email"
+            type="text"
+            required
+            autoComplete="off"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <label htmlFor="email">Email</label>
+        </div>
+
+        <div className="inputGroup ">
+          <input
+            id="tel"
+            type="text"
+            required
+            autoComplete="off"
+            value={tel}
+            onChange={(e) => setTel(e.target.value)}
+          />
+          <label htmlFor="tel">Telefone</label>
+        </div>
+        <div className="inputGroup ">
+          <input
+            id="cnpj"
+            type="text"
+            required
+            autoComplete="off"
+            value={cnpj}
+            onChange={(e) => setCnpj(e.target.value)}
+          />
+          <label htmlFor="cnpj">CNPJ</label>
+        </div>
+
+        <div className="inputGroup ">
+          <input
+            id="uf"
+            type="text"
+            required
+            autoComplete="off"
+            value={uf}
+            onChange={(e) => setUf(e.target.value)}
+          />
+          <label htmlFor="uf">UF</label>
+        </div>
+
+        <div className="inputGroup ">
+          <input
+            id="cidade"
+            type="text"
+            required
+            autoComplete="off"
+            value={cidade}
+            onChange={(e) => setCidade(e.target.value)}
+          />
+          <label htmlFor="cidade">Cidade</label>
+        </div>
+
+        <div className="inputGroup ">
+          <input
+            id="subject"
+            type="text"
+            required
+            autoComplete="off"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+          />
+          <label htmlFor="subject">Assunto</label>
+        </div>
+
+        <div className="inputGroup ">
+          <input
+            id="mensagem"
+            type="text"
+            required
+            autoComplete="off"
+            value={mensagem}
+            onChange={(e) => setMensagem(e.target.value)}
+          />
+          <label htmlFor="mensagem">Mensagem</label>
+        </div>
+        <ReCAPTCHA
+          sitekey="6LeiHLUrAAAAAGSZQOhJEfZEXNda-XPKmZojbD9G"
+          onChange={(value) => setCaptchaValue(value)}
         />
 
-        <input className="button" type="submit" value="Enviar" />
+        <input
+          className="cursor-pointer text-web-red my-20 py-5 px-36 rounded-2xl shadow-[2px_2px_7px_-2px_#ff0000] hover:bg-web-pink hover:shadow-[2px_2px_7px_-2px_#000] transition-all duration-700"
+          type="submit"
+          value="Enviar"
+        />
       </form>
     </div>
   );
