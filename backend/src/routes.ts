@@ -60,7 +60,7 @@ router.put("/editProduct/:id", authentcate, new EditProduct().handle);
 router.delete("/deleteProduct/:id", authentcate, new DeleteProduct().handle);
 router.get("/listProducts", new ListProducts().handle);
 
-router.get("/listProduct", new ListProduct().handle);
+// router.get("/listProduct", new ListProduct().handle);
 router.get("/GetProductDetail/:id", new GetProductDetail().handle);
 
 export default router;
