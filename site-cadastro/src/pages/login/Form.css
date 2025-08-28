@@ -1,0 +1,25 @@
+.inputGroup {
+  font-family: "Segoe UI", sans-serif;
+  margin-bottom: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputGroup input {
+  font-size: 100%;
+  padding: 0.8em;
+  outline: none;
+  border: 2px solid var(--color-web-red);
+  background-color: var(--color-web-pink);
+  border-radius: 20px;
+  width: 100%;
+}
+
+.inputGroup label {
+  left: 0;
+  padding: 0.8em;
+  margin-left: 0.5em;
+  color: #ffff;
+  font-weight: bold;
+}

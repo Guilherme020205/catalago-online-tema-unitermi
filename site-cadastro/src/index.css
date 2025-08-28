@@ -4,3 +4,12 @@
   --color-web-pink: #ffe2e2;
   --color-web-gray: #d9d9d9;
 }
+
+.formulario {
+  background: #ff7a8c;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 122, 140, 1) 0%,
+    rgba(143, 0, 19, 1) 100%
+  );
+}

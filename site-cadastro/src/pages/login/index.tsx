@@ -2,16 +2,29 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../service/api";
 import { AuthContext } from "../../context/AuthContext";
+import logo from "../../assets/6Uu1ixeg.png";
+import ReCAPTCHA from "react-google-recaptcha";
+import "./Form.css";
 
 const ScreenLogin = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault(); 
+    e.preventDefault();
     try {
+      if (!captchaValue) {
+        alert("Por favor, confirme o reCAPTCHA");
+        return;
+      }
+
+      if (!user || !password) {
+        alert("Usuário e senha não enviados ");
+        return;
+      }
       const response = await api.post("/login", {
         user,
         password,
@@ -24,23 +37,53 @@ const ScreenLogin = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          placeholder="Usuário"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Entrar</button>
-      </form>
+    <div className="flex flex-row w-full h-screen justify-center gap-20">
+      <div className="flex justify-center items-center w-full">
+        <img src={logo} alt="logo" className="w-96 h-64" />
+      </div>
+      <div className="formulario w-full flex justify-center items-center">
+        <div className="flex flex-col w-96">
+          <h2 className="text-white font-bold text-6xl mb-10">Bem-Vindo!</h2>
+          <form onSubmit={handleLogin} className="flex flex-col">
+
+            <div className="inputGroup ">
+              <label htmlFor="user">Usuário:</label>
+
+              <input
+                id="user"
+                type="text"
+                required
+                autoComplete="off"
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
+              />
+            </div>
+
+            <div className="inputGroup">
+              <label htmlFor="password">Senha:</label>
+
+              <input
+                id="password"
+                type="password"
+                required
+                autoComplete="off"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <ReCAPTCHA
+              sitekey="6LeiHLUrAAAAAGSZQOhJEfZEXNda-XPKmZojbD9G"
+              onChange={(value) => setCaptchaValue(value)}
+            />
+            <button
+              className="cursor-pointer bg-white text-web-red my-5 py-5 px-36 rounded-2xl shadow-[2px_2px_7px_-2px_#ff0000] hover:bg-web-pink hover:shadow-[2px_2px_7px_-2px_#000] transition-all duration-700"
+              type="submit"
+            >
+              Entrar
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
