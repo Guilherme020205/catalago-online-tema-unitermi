@@ -88,9 +88,9 @@ const ScreenCorLine = () => {
       </div>
 
       <div className="flex flex-row justify-between mt-10">
-        <section className="bg-web-gray rounded-2xl p-4">
-          <ul>
-            {colors.map((color: any) => (
+        <ul>
+          {colors.map((color: any) => (
+            <section className="bg-web-gray rounded-2xl p-4">
               <li key={color.id} className="w-[600px]">
                 <div className="flex justify-between items-center w-full my-2">
                   {editId === color.id ? (
@@ -112,6 +112,16 @@ const ScreenCorLine = () => {
                         className="bg-green-500 text-white px-3 py-1 rounded-lg cursor-pointer"
                       >
                         Salvar
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditId(null);
+                          setEditName("");
+                          setEditCode("");
+                        }}
+                        className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
+                      >
+                        Cancelar
                       </button>
                     </div>
                   ) : (
@@ -143,9 +153,9 @@ const ScreenCorLine = () => {
                 </div>
                 <hr />
               </li>
-            ))}
-          </ul>
-        </section>
+            </section>
+          ))}
+        </ul>
         <div></div>
       </div>
     </div>

@@ -15,10 +15,14 @@ const ScreenCategorys = () => {
   }
 
   async function createCategory() {
-    if (!nameCategoria.trim()) return;
-    await api.post("/creatCategory", { name: nameCategoria });
-    setNameCategoria("");
-    getCategorys();
+    try {
+      if (!nameCategoria.trim()) return;
+      await api.post("/creatCategory", { name: nameCategoria });
+      setNameCategoria("");
+      getCategorys();
+    } catch (error) {
+      alert("Erro ao criar categoria");
+    }
   }
 
   async function deleteCategory(id: string) {
@@ -73,9 +77,9 @@ const ScreenCategorys = () => {
       </div>
 
       <div className="flex flex-row justify-between mt-10">
-        <section className="bg-web-gray rounded-2xl p-4">
-          <ul>
-            {categorias.map((categoria: any) => (
+        <ul>
+          {categorias.map((categoria: any) => (
+            <section className="bg-web-gray rounded-2xl p-4">
               <li key={categoria.id} className="w-[600px]">
                 <div className="flex justify-between w-full my-2">
                   {editId === categoria.id ? (
@@ -91,6 +95,15 @@ const ScreenCategorys = () => {
                         className="bg-green-500 text-white px-3 py-1 rounded-lg cursor-pointer"
                       >
                         Salvar
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditId(null);
+                          setEditName("");
+                        }} // Cancela a edição
+                        className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
+                      >
+                        Cancelar
                       </button>
                     </div>
                   ) : (
@@ -116,10 +129,9 @@ const ScreenCategorys = () => {
                 </div>
                 <hr />
               </li>
-            ))}
-          </ul>
-        </section>
-        <div></div>
+            </section>
+          ))}
+        </ul>
       </div>
     </div>
   );

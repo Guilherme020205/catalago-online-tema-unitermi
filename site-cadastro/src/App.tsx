@@ -18,7 +18,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route element={<HeaderWithLayout />}>
+          <Route>
             <Route path="/" element={<ScreenLogin />} />
           </Route>
 

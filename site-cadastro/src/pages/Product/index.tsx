@@ -17,11 +17,27 @@ interface Product {
 
 const ScreenProduct = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [search, setSearch] = useState(""); // texto da busca
+  const [page, setPage] = useState(1); // página atual
+  const [totalPages, setTotalPages] = useState(1); // total de páginas
   const navigate = useNavigate();
+  const limit = 30; // produtos por página
 
   async function getProducts() {
-    const response = await api.get("/listProducts");
-    setProducts(response.data.products);
+    try {
+      const response = await api.get("/products/search", {
+        params: {
+          name: search,
+          page,
+          limit,
+        },
+      });
+      setProducts(response.data.products);
+      setTotalPages(response.data.pagination.totalPages);
+    } catch (error: any) {
+      console.error(error);
+      alert("Erro ao buscar produtos");
+    }
   }
 
   async function deleteProduct(id: string) {
@@ -38,7 +54,7 @@ const ScreenProduct = () => {
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [search, page]); // refaz a busca ao mudar search ou page
 
   return (
     <div className="flex flex-col m-20">
@@ -46,54 +62,99 @@ const ScreenProduct = () => {
         <p className="text-2xl font-bold select-none">Produtos</p>
         <button
           onClick={() => navigate("/create-product")}
-          className="bg-green-500 text-white px-4 py-2 rounded-lg"
+          className="bg-green-500 text-white px-4 py-2 rounded-lg cursor-pointer"
         >
           Novo Produto
         </button>
       </div>
 
-      <div>
-        <ul>
-          {products.map((product) => (
-            <li
-              key={product.id}
-              className="flex justify-between my-2 p-2 border rounded-lg"
-            >
-              <div className="flex gap-4">
-                {product.Image && (
-                  <img
-                    src={product.Image}
-                    alt={product.name}
-                    className="w-20 h-20 object-cover rounded"
-                  />
-                )}
-                <div>
-                  <p className="font-bold">{product.name}</p>
-                  <p>{product.description}</p>
-                  <p className="text-sm text-gray-500">
-                    Categoria: {product.Category?.name} | Linha:{" "}
-                    {product.ProductLine?.name} | Cor: {product.ColorLine?.name}{" "}
-                    | Capacidade: {product.ProductCapacity?.capacity || "—"}
-                  </p>
-                </div>
+      {/* Barra de pesquisa */}
+      <div className="mb-6 flex gap-2">
+        <input
+          type="text"
+          placeholder="Pesquisar produtos..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border rounded px-3 py-2 flex-1"
+        />
+        <button
+          onClick={() => { setPage(1); getProducts(); }}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Buscar
+        </button>
+      </div>
+
+      {/* Lista de produtos */}
+      <ul>
+        {products.map((product) => (
+          <li
+            key={product.id}
+            className="flex justify-between my-2 p-2 border rounded-lg"
+          >
+            <div className="flex gap-4">
+              {product.Image && (
+                <img
+                  src={product.Image}
+                  alt={product.name}
+                  className="w-20 h-20 object-cover rounded"
+                />
+              )}
+              <div>
+                <p className="font-bold">{product.name}</p>
+                <p>{product.description}</p>
+                <p className="text-sm text-gray-500">
+                  Categoria: {product.Category?.name} | Linha:{" "}
+                  {product.ProductLine?.name} | Cor: {product.ColorLine?.name} | Capacidade:{" "}
+                  {product.ProductCapacity?.capacity || "—"}
+                </p>
               </div>
-              <div className="flex gap-3 items-center">
-                <button
-                  onClick={() => navigate(`/edit-product/${product.id}`)}
-                  className="text-blue-500"
-                >
-                  <FaPencil />
-                </button>
-                <button
-                  onClick={() => deleteProduct(product.id)}
-                  className="text-red-500"
-                >
-                  <IoTrashBin />
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+            </div>
+            <div className="flex gap-3 items-center">
+              <button
+                onClick={() => navigate(`/edit-product/${product.id}`)}
+                className="text-blue-500"
+              >
+                <FaPencil />
+              </button>
+              <button
+                onClick={() => deleteProduct(product.id)}
+                className="text-red-500"
+              >
+                <IoTrashBin />
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      {/* Paginação */}
+      <div className="mt-6 flex justify-center gap-2">
+        <button
+          disabled={page <= 1}
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          className="px-3 py-1 border rounded disabled:opacity-50"
+        >
+          Anterior
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+          <button
+            key={p}
+            onClick={() => setPage(p)}
+            className={`px-3 py-1 border rounded ${p === page ? "bg-blue-500 text-white" : ""}`}
+          >
+            {p}
+          </button>
+        ))}
+
+        <button
+          disabled={page >= totalPages}
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          className="px-3 py-1 border rounded disabled:opacity-50"
+        >
+          Próxima
+        </button>
       </div>
     </div>
   );

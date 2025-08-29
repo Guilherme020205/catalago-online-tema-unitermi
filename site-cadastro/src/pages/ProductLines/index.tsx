@@ -118,9 +118,9 @@ const ScreenProductLines = () => {
 
       {/* Lista de linhas */}
       <div className="flex flex-row justify-between mt-10">
-        <section className="bg-web-gray rounded-2xl p-4">
-          <ul>
-            {lines.map((line: any) => (
+        <ul>
+          {lines.map((line: any) => (
+            <section className="bg-web-gray rounded-2xl p-4">
               <li key={line.id} className="w-[600px]">
                 <div className="flex justify-between w-full my-2">
                   {editId === line.id ? (
@@ -151,6 +151,17 @@ const ScreenProductLines = () => {
                       >
                         Salvar
                       </button>
+
+                      <button
+                        onClick={() => {
+                          setEditId(null);
+                          setEditValue("");
+                          setSelectedCategory("");
+                        }}
+                        className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
+                      >
+                        Cancelar
+                      </button>
                     </div>
                   ) : (
                     <>
@@ -159,9 +170,8 @@ const ScreenProductLines = () => {
                         <span className="text-sm text-gray-500">
                           (Categoria:{" "}
                           {
-                            categories.find(
-                              (c) => c.id === line.idCategory
-                            )?.name
+                            categories.find((c) => c.id === line.idCategory)
+                              ?.name
                           }
                           )
                         </span>
@@ -185,9 +195,9 @@ const ScreenProductLines = () => {
                 </div>
                 <hr />
               </li>
-            ))}
-          </ul>
-        </section>
+            </section>
+          ))}
+        </ul>
       </div>
     </div>
   );

@@ -31,7 +31,8 @@ import { ListProducts } from "./Controllers/Produto/ListProducts";
 import { ListProductsSuggestions } from "./Controllers/Produto/web/ListProductsSuggestions";
 import { GetProductDetail } from "./Controllers/Produto/web/GetProductDetail";
 import upload from "./config/multer";
-
+import { ListProductsByName } from "./Controllers/Produto/ListProductsFilters";
+ 
 const router = Router();
 
 router.post("/login", new loginController().handle);
@@ -60,6 +61,8 @@ router.post("/creatProduct", authentcate, upload.single("Image"), new CreateProd
 router.put("/editProduct/:id", authentcate, upload.single("Image"), new EditProduct().handle);
 router.delete("/deleteProduct/:id", authentcate, new DeleteProduct().handle);
 router.get("/listProducts", new ListProducts().handle);
+
+router.get("/products/search", new ListProductsByName().handle);
 
 router.get("/listProductsSuggestions", new ListProductsSuggestions().handle);
 router.get("/GetProductDetail/:id", new GetProductDetail().handle);

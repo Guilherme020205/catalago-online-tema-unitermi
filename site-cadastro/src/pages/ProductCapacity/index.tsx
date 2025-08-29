@@ -73,9 +73,9 @@ const ScreenProductCapacity = () => {
       </div>
 
       <div className="flex flex-row justify-between mt-10">
-        <section className="bg-web-gray rounded-2xl p-4">
-          <ul>
-            {capacities.map((capacity: any) => (
+        <ul>
+          {capacities.map((capacity: any) => (
+            <section className="bg-web-gray rounded-2xl p-4">
               <li key={capacity.id} className="w-[600px]">
                 <div className="flex justify-between w-full my-2">
                   {editId === capacity.id ? (
@@ -91,6 +91,15 @@ const ScreenProductCapacity = () => {
                         className="bg-green-500 text-white px-3 py-1 rounded-lg cursor-pointer"
                       >
                         Salvar
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditId(null);
+                          setEditValue("");
+                        }}
+                        className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
+                      >
+                        Cancelar
                       </button>
                     </div>
                   ) : (
@@ -115,9 +124,9 @@ const ScreenProductCapacity = () => {
                 </div>
                 <hr />
               </li>
-            ))}
-          </ul>
-        </section>
+            </section>
+          ))}
+        </ul>
       </div>
     </div>
   );
