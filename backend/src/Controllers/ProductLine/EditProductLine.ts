@@ -11,8 +11,12 @@ class EditProductLine {
         return res.status(401).json({ message: "error edit product line" });
       }
 
-      const productLineExist = await prisma.productLine.findUnique({
-        where: { name: name },
+      const productLineExist = await prisma.productLine.findFirst({
+        where: {
+          name,
+          idCategory,
+          NOT: { id },
+        },
       });
 
       if (productLineExist) {
@@ -31,7 +35,10 @@ class EditProductLine {
 
       const editProductLine = await prisma.productLine.update({
         where: { id: id },
-        data: { name: name },
+        data: { 
+          name: name,
+          idCategory: idCategory, // 🔥 agora também atualiza categoria
+        },
       });
 
       res.status(200).json({ message: "Edit Product Line: ", editProductLine });
