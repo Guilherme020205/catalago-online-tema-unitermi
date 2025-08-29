@@ -1,0 +1,176 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { api } from "../../../service/api";
+
+const ProductFormScreen = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [categories, setCategories] = useState<any[]>([]);
+  const [lines, setLines] = useState<any[]>([]);
+  const [colors, setColors] = useState<any[]>([]);
+  const [capacities, setCapacities] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLine, setSelectedLine] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedCapacity, setSelectedCapacity] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
+
+  useEffect(() => {
+    api.get("/listCategory").then((res) => setCategories(res.data.Categorys));
+    api.get("/listProductLine").then((res) => setLines(res.data.productLines));
+    api.get("/listColorLine").then((res) => setColors(res.data.colorLines));
+    api
+      .get("/listProductCapacity")
+      .then((res) => setCapacities(res.data.productCapacitys));
+  }, []);
+
+  useEffect(() => {
+    if (!id) return;
+
+    api.get(`/GetProductDetail/${id}`).then((res) => {
+      const p = res.data.product;
+      setName(p.name);
+      setDescription(p.description);
+      setSelectedCategory(p.idCategory);
+      setSelectedLine(p.idProductLine);
+      setSelectedColor(p.colorLineId);
+      setSelectedCapacity(p.productCapacityId);
+      setImagePreview(p.Image); // preview da imagem existente
+    });
+  }, [id]);
+
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file)); // preview da nova imagem
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("idCategory", selectedCategory);
+    formData.append("idProductLine", selectedLine);
+    formData.append("colorLineId", selectedColor);
+    if (selectedCapacity) formData.append("productCapacityId", selectedCapacity);
+    if (imageFile) formData.append("Image", imageFile);
+
+    try {
+      if (id) {
+        await api.put(`/editProduct/${id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } else {
+        await api.post("/creatProduct", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+      navigate("/product");
+    } catch (error: any) {
+      alert(error.response?.data?.message || "Erro ao salvar produto");
+    }
+  }
+
+  return (
+    <div className="flex flex-col m-20">
+      <div className="flex justify-between items-center mb-6">
+        <p className="text-2xl font-bold select-none">
+          {id ? "Editar Produto" : "Criar Produto"}
+        </p>
+        <button
+          onClick={() => navigate("/product")}
+          className="bg-gray-500 text-white px-4 py-2 rounded-lg"
+        >
+          Cancelar
+        </button>
+      </div>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-lg">
+        <input
+          type="text"
+          placeholder="Nome"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="border p-2 rounded-lg"
+        />
+        <textarea
+          placeholder="Descrição"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="border p-2 rounded-lg"
+        />
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="border p-2 rounded-lg"
+        >
+          <option value="">Selecione uma categoria</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <select
+          value={selectedLine}
+          onChange={(e) => setSelectedLine(e.target.value)}
+          className="border p-2 rounded-lg"
+        >
+          <option value="">Selecione uma linha</option>
+          {lines.map((l) => (
+            <option key={l.id} value={l.id}>
+              {l.name}
+            </option>
+          ))}
+        </select>
+        <select
+          value={selectedColor}
+          onChange={(e) => setSelectedColor(e.target.value)}
+          className="border p-2 rounded-lg"
+        >
+          <option value="">Selecione uma cor</option>
+          {colors.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <select
+          value={selectedCapacity || ""}
+          onChange={(e) => setSelectedCapacity(e.target.value)}
+          className="border p-2 rounded-lg"
+        >
+          <option value="">Selecione uma capacidade</option>
+          {capacities.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.capacity}
+            </option>
+          ))}
+        </select>
+        {imagePreview && (
+          <img
+            src={imagePreview}
+            alt="Preview"
+            className="w-40 h-40 object-cover rounded my-2"
+          />
+        )}
+        <input type="file" onChange={handleImageChange} />
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+        >
+          {id ? "Salvar Alterações" : "Criar Produto"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default ProductFormScreen;

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../../database";
+import cloudinary from "../../config/cloudinary";
 
 class CreateProduct {
   async handle(req: Request, res: Response) {
@@ -17,22 +18,16 @@ class CreateProduct {
       Code,
       NCM,
       EAN,
-      Image,
     } = req.body;
 
     try {
-      if (
-        !name ||
-        !description ||
-        !idCategory ||
-        !idProductLine ||
-        !Image ||
-        !colorLineId
-      ) {
+      if (!name || !description || !idCategory || !idProductLine || !colorLineId) {
         return res.status(400).json({
-          message: "error creating product",
+          message: "Dados obrigatórios faltando",
         });
       }
+
+      // 🔍 Verifica duplicidade
       const existingProduct = await prisma.product.findFirst({
         where: {
           idCategory,
@@ -41,6 +36,7 @@ class CreateProduct {
           productCapacityId,
         },
       });
+
       if (existingProduct) {
         return res.status(400).json({
           error:
@@ -48,6 +44,23 @@ class CreateProduct {
         });
       }
 
+      // 📤 Upload da imagem no Cloudinary
+      let imageUrl: string | null = null;
+      if (req.file) {
+        await new Promise<void>((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "products" },
+            (error, result) => {
+              if (error) return reject(error);
+              imageUrl = result?.secure_url || null;
+              resolve();
+            }
+          );
+          stream.end(req.file!  .buffer);
+        });
+      }
+
+      // 📝 Criação no banco
       const product = await prisma.product.create({
         data: {
           name,
@@ -56,21 +69,21 @@ class CreateProduct {
           idProductLine,
           colorLineId: colorLineId,
           productCapacityId: productCapacityId || null,
-          Dimensions: Dimensions || null,
-          Materials: Materials || null,
-          OtherFeatures: OtherFeatures || null,
-          Weight: Weight || null,
-          Code: Code || null,
-          NCM: NCM || null,
-          EAN: EAN || null,
-          Image: Image,
+          Dimensions: Dimensions || "",
+          Materials: Materials || "",
+          OtherFeatures: OtherFeatures || "",
+          Weight: Weight || "",
+          Code: Code || "",
+          NCM: NCM || "",
+          EAN: EAN || "",
+          Image: imageUrl || "", // salva URL do Cloudinary
         },
       });
 
       return res.status(201).json(product);
     } catch (error: any) {
       console.error(error);
-      return res.status(500).json({ message: "error creating product" });
+      return res.status(500).json({ message: "Erro ao criar produto", error: error.message });
     }
   }
 }

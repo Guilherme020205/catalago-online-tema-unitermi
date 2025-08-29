@@ -30,6 +30,7 @@ import { ListProducts } from "./Controllers/Produto/ListProducts";
 
 import { ListProductsSuggestions } from "./Controllers/Produto/web/ListProductsSuggestions";
 import { GetProductDetail } from "./Controllers/Produto/web/GetProductDetail";
+import upload from "./config/multer";
 
 const router = Router();
 
@@ -55,8 +56,8 @@ router.put("/editCategory/:id", authentcate, new EditCategory().handle);
 router.delete("/deleteCategory/:id", authentcate, new DeleteCategory().handle);
 router.get("/listCategory", new ListCategory().handle);
 
-router.post("/creatProduct", authentcate, new CreateProduct().handle);
-router.put("/editProduct/:id", authentcate, new EditProduct().handle);
+router.post("/creatProduct", authentcate, upload.single("Image"), new CreateProduct().handle);
+router.put("/editProduct/:id", authentcate, upload.single("Image"), new EditProduct().handle);
 router.delete("/deleteProduct/:id", authentcate, new DeleteProduct().handle);
 router.get("/listProducts", new ListProducts().handle);
 

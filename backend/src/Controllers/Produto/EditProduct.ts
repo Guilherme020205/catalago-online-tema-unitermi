@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../../database";
+import cloudinary from "../../config/cloudinary";
 
 class EditProduct {
   async handle(req: Request, res: Response) {
@@ -19,26 +20,31 @@ class EditProduct {
       Code,
       NCM,
       EAN,
-      Image,
     } = req.body;
 
     try {
-      if (!id) {
-        return res.status(400).json({ message: "ID do produto é obrigatório" });
-      }
+      if (!id) return res.status(400).json({ message: "ID do produto é obrigatório" });
 
       const productExists = await prisma.product.findUnique({
         where: { id },
-        include: {
-          Category: true,
-          ColorLine: true,
-          ProductCapacity: true,
-          ProductLine: true
-        }
       });
 
-      if (!productExists) {
-        return res.status(404).json({ message: "Product not exist" });
+      if (!productExists) return res.status(404).json({ message: "Produto não existe" });
+
+      let imageUrl = productExists.Image;
+
+      if (req.file) {
+        await new Promise<void>((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "products" },
+            (error, result) => {
+              if (error) return reject(error);
+              imageUrl = result?.secure_url || productExists.Image;
+              resolve();
+            }
+          );
+          stream.end(req.file!.buffer);
+        });
       }
 
       const updatedProduct = await prisma.product.update({
@@ -49,8 +55,7 @@ class EditProduct {
           idCategory: idCategory ?? productExists.idCategory,
           idProductLine: idProductLine ?? productExists.idProductLine,
           colorLineId: colorLineId ?? productExists.colorLineId,
-          productCapacityId:
-            productCapacityId ?? productExists.productCapacityId,
+          productCapacityId: productCapacityId ?? productExists.productCapacityId,
           Dimensions: Dimensions ?? productExists.Dimensions,
           Materials: Materials ?? productExists.Materials,
           OtherFeatures: OtherFeatures ?? productExists.OtherFeatures,
@@ -58,14 +63,14 @@ class EditProduct {
           Code: Code ?? productExists.Code,
           NCM: NCM ?? productExists.NCM,
           EAN: EAN ?? productExists.EAN,
-          Image: Image ?? productExists.Image,
+          Image: imageUrl,
         },
       });
 
       return res.status(200).json(updatedProduct);
     } catch (error: any) {
       console.error(error);
-      return res.status(500).json({ message: "error edit product" });
+      return res.status(500).json({ message: "Erro ao editar produto", error: error.message });
     }
   }
 }
