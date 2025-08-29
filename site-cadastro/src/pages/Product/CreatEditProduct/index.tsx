@@ -206,7 +206,7 @@ const ProductFormScreen = () => {
             setSelectedColor("");
             setSelectedCapacity(null);
           }}
-          className="border p-2 rounded-lg"
+          className="border p-2 rounded-lg disabled:text-gray-300"
           required
           disabled={!selectedCategory}
         >
@@ -225,7 +225,7 @@ const ProductFormScreen = () => {
         <select
           value={selectedColor}
           onChange={(e) => setSelectedColor(e.target.value)}
-          className="border p-2 rounded-lg"
+          className="border p-2 rounded-lg disabled:text-gray-300"
           required
           disabled={!selectedCategory || !selectedLine}
         >
@@ -240,7 +240,7 @@ const ProductFormScreen = () => {
         <select
           value={selectedCapacity || ""}
           onChange={(e) => setSelectedCapacity(e.target.value)}
-          className="border p-2 rounded-lg"
+          className="border p-2 rounded-lg disabled:text-gray-300"
           disabled={!selectedCategory || !selectedLine}
         >
           <option value="">Selecione uma capacidade</option>

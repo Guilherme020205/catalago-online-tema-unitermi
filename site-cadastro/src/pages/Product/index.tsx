@@ -17,11 +17,11 @@ interface Product {
 
 const ScreenProduct = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [search, setSearch] = useState(""); // texto da busca
-  const [page, setPage] = useState(1); // página atual
-  const [totalPages, setTotalPages] = useState(1); // total de páginas
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
-  const limit = 30; // produtos por página
+  const limit = 30;
 
   async function getProducts() {
     try {
@@ -54,7 +54,7 @@ const ScreenProduct = () => {
 
   useEffect(() => {
     getProducts();
-  }, [search, page]); // refaz a busca ao mudar search ou page
+  }, [search, page]);
 
   return (
     <div className="flex flex-col m-20">
@@ -68,7 +68,6 @@ const ScreenProduct = () => {
         </button>
       </div>
 
-      {/* Barra de pesquisa */}
       <div className="mb-6 flex gap-2">
         <input
           type="text"
@@ -78,14 +77,16 @@ const ScreenProduct = () => {
           className="border rounded px-3 py-2 flex-1"
         />
         <button
-          onClick={() => { setPage(1); getProducts(); }}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={() => {
+            setPage(1);
+            getProducts();
+          }}
+          className="bg-blue-500 text-white px-4 py-2 cursor-pointer rounded"
         >
           Buscar
         </button>
       </div>
 
-      {/* Lista de produtos */}
       <ul>
         {products.map((product) => (
           <li
@@ -105,21 +106,21 @@ const ScreenProduct = () => {
                 <p>{product.description}</p>
                 <p className="text-sm text-gray-500">
                   Categoria: {product.Category?.name} | Linha:{" "}
-                  {product.ProductLine?.name} | Cor: {product.ColorLine?.name} | Capacidade:{" "}
-                  {product.ProductCapacity?.capacity || "—"}
+                  {product.ProductLine?.name} | Cor: {product.ColorLine?.name} |
+                  Capacidade: {product.ProductCapacity?.capacity || "—"}
                 </p>
               </div>
             </div>
             <div className="flex gap-3 items-center">
               <button
                 onClick={() => navigate(`/edit-product/${product.id}`)}
-                className="text-blue-500"
+                className="text-blue-500 cursor-pointer"
               >
                 <FaPencil />
               </button>
               <button
                 onClick={() => deleteProduct(product.id)}
-                className="text-red-500"
+                className="text-red-500 cursor-pointer"
               >
                 <IoTrashBin />
               </button>
@@ -128,12 +129,11 @@ const ScreenProduct = () => {
         ))}
       </ul>
 
-      {/* Paginação */}
       <div className="mt-6 flex justify-center gap-2">
         <button
           disabled={page <= 1}
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          className="px-3 py-1 border rounded disabled:opacity-50"
+          className="px-3 py-1 border cursor-pointer rounded disabled:opacity-50"
         >
           Anterior
         </button>
@@ -142,7 +142,9 @@ const ScreenProduct = () => {
           <button
             key={p}
             onClick={() => setPage(p)}
-            className={`px-3 py-1 border rounded ${p === page ? "bg-blue-500 text-white" : ""}`}
+            className={`px-3 py-1 border cursor-pointer rounded ${
+              p === page ? "bg-blue-500 text-white" : ""
+            }`}
           >
             {p}
           </button>
@@ -151,7 +153,7 @@ const ScreenProduct = () => {
         <button
           disabled={page >= totalPages}
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-          className="px-3 py-1 border rounded disabled:opacity-50"
+          className="px-3 py-1 border rounded cursor-pointer disabled:opacity-50"
         >
           Próxima
         </button>

@@ -77,9 +77,9 @@ const ScreenCategorys = () => {
       </div>
 
       <div className="flex flex-row justify-between mt-10">
-        <ul>
-          {categorias.map((categoria: any) => (
-            <section className="bg-web-gray rounded-2xl p-4">
+        <section className="bg-web-gray rounded-2xl p-4">
+          <ul>
+            {categorias.map((categoria: any) => (
               <li key={categoria.id} className="w-[600px]">
                 <div className="flex justify-between w-full my-2">
                   {editId === categoria.id ? (
@@ -129,9 +129,9 @@ const ScreenCategorys = () => {
                 </div>
                 <hr />
               </li>
-            </section>
-          ))}
-        </ul>
+            ))}
+          </ul>
+        </section>
       </div>
     </div>
   );

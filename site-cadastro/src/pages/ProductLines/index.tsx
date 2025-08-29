@@ -6,10 +6,15 @@ import { useEffect, useState } from "react";
 const ScreenProductLines = () => {
   const [lines, setLines] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+
+  // Estados para criar nova linha
   const [newLine, setNewLine] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [newLineCategory, setNewLineCategory] = useState("");
+
+  // Estados para editar linha existente
   const [editId, setEditId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
+  const [editCategory, setEditCategory] = useState("");
 
   async function getLines() {
     const response = await api.get("/listProductLine");
@@ -22,18 +27,18 @@ const ScreenProductLines = () => {
   }
 
   async function createLine() {
-    if (!newLine.trim() || !selectedCategory) {
+    if (!newLine.trim() || !newLineCategory) {
       alert("Preencha o nome e selecione uma categoria!");
       return;
     }
 
     await api.post("/creatProductLine", {
       name: newLine,
-      idCategory: selectedCategory,
+      idCategory: newLineCategory,
     });
 
     setNewLine("");
-    setSelectedCategory("");
+    setNewLineCategory("");
     getLines();
   }
 
@@ -56,23 +61,23 @@ const ScreenProductLines = () => {
   function startEdit(line: any) {
     setEditId(line.id);
     setEditValue(line.name);
-    setSelectedCategory(line.idCategory); // já seta categoria da linha
+    setEditCategory(line.idCategory); // só altera o select da edição
   }
 
   async function saveEdit() {
-    if (!editId || !editValue.trim() || !selectedCategory) {
+    if (!editId || !editValue.trim() || !editCategory) {
       alert("Preencha todos os campos antes de salvar!");
       return;
     }
 
     await api.put(`/editProductLine/${editId}`, {
       name: editValue,
-      idCategory: selectedCategory,
+      idCategory: editCategory,
     });
 
     setEditId(null);
     setEditValue("");
-    setSelectedCategory("");
+    setEditCategory("");
     getLines();
   }
 
@@ -96,8 +101,8 @@ const ScreenProductLines = () => {
         />
 
         <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          value={newLineCategory}
+          onChange={(e) => setNewLineCategory(e.target.value)}
           className="border p-2 rounded-lg"
         >
           <option value="">Selecione uma categoria</option>
@@ -118,9 +123,9 @@ const ScreenProductLines = () => {
 
       {/* Lista de linhas */}
       <div className="flex flex-row justify-between mt-10">
-        <ul>
-          {lines.map((line: any) => (
-            <section className="bg-web-gray rounded-2xl p-4">
+        <section className="bg-web-gray rounded-2xl p-4">
+          <ul>
+            {lines.map((line: any) => (
               <li key={line.id} className="w-[600px]">
                 <div className="flex justify-between w-full my-2">
                   {editId === line.id ? (
@@ -133,8 +138,8 @@ const ScreenProductLines = () => {
                       />
 
                       <select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        value={editCategory}
+                        onChange={(e) => setEditCategory(e.target.value)}
                         className="border p-1 rounded-lg"
                       >
                         <option value="">Selecione uma categoria</option>
@@ -156,7 +161,7 @@ const ScreenProductLines = () => {
                         onClick={() => {
                           setEditId(null);
                           setEditValue("");
-                          setSelectedCategory("");
+                          setEditCategory("");
                         }}
                         className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
                       >
@@ -195,9 +200,9 @@ const ScreenProductLines = () => {
                 </div>
                 <hr />
               </li>
-            </section>
-          ))}
-        </ul>
+            ))}
+          </ul>
+        </section>
       </div>
     </div>
   );

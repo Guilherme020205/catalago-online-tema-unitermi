@@ -88,9 +88,9 @@ const ScreenCorLine = () => {
       </div>
 
       <div className="flex flex-row justify-between mt-10">
-        <ul>
-          {colors.map((color: any) => (
-            <section className="bg-web-gray rounded-2xl p-4">
+        <section className="bg-web-gray rounded-2xl p-4">
+          <ul>
+            {colors.map((color: any) => (
               <li key={color.id} className="w-[600px]">
                 <div className="flex justify-between items-center w-full my-2">
                   {editId === color.id ? (
@@ -153,10 +153,9 @@ const ScreenCorLine = () => {
                 </div>
                 <hr />
               </li>
-            </section>
-          ))}
-        </ul>
-        <div></div>
+            ))}
+          </ul>
+        </section>
       </div>
     </div>
   );
