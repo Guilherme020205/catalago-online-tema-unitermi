@@ -71,8 +71,7 @@ function ScreenProducts() {
         </ul>
       </div>
 
-      {/* produtos */}
-      <div className="flex justify-center mt-12 min-h-[500px]">
+       <div className="flex justify-center mt-12 min-h-[500px]">
         {products.length === 0 ? (
           <p className="flex text-center w-96">
             Pedimos desculpas, mas não encontramos produtos cadastrados nessa
@@ -92,8 +91,7 @@ function ScreenProducts() {
         )}
       </div>
 
-      {/* paginação */}
-      <div className="flex justify-center items-center mt-10 gap-4">
+       <div className="flex justify-center items-center mt-10 gap-4">
         {products.length === 0 ? (
           <p></p>
         ) : (

@@ -10,18 +10,27 @@ class ListProductsSuggestions {
       const params: any[] = [];
 
       if (category) {
-        whereClause = `WHERE "idCategory" = $1`;
+        whereClause = `WHERE p."idCategory" = $1`;
         params.push(category);
       }
 
       const products = await prisma.$queryRawUnsafe(
         `
-        SELECT * 
-        FROM "products"
-        ${whereClause}
-        ORDER BY RANDOM()
-        LIMIT 4
-        `,
+  SELECT 
+    p.*, 
+    pl."name" AS "productLineName",
+    c."name"  AS "categoryName",
+    cl."name" AS "colorLineName",
+    pc."capacity" AS "capacityName"
+  FROM "products" p
+  LEFT JOIN "productLine" pl ON p."idProductLine" = pl.id
+  LEFT JOIN "category"   c  ON p."idCategory" = c.id
+  LEFT JOIN "corLine"    cl ON p."colorLineId" = cl.id
+  LEFT JOIN "productCapacity" pc ON p."productCapacityId" = pc.id
+  ${whereClause}
+  ORDER BY RANDOM()
+  LIMIT 4
+  `,
         ...params
       );
 

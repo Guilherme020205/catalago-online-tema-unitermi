@@ -14,8 +14,8 @@ function Suggestions({ categoryId }: Info) {
       const response = await api.get(
         `/listProductsSuggestions?category=${categoryId}`
       );
-      setProducts(response.data.products);
-      console.log(response)
+      setProducts(response.data.products); 
+      console.log(response.data.products); 
     } catch (error) {
       console.error(error);
     }
@@ -39,9 +39,7 @@ function Suggestions({ categoryId }: Info) {
                 key={product.id}
                 id={product.id}
                 img={product.Image}
-                name={
-                  "dljslkjd"
-                }
+                name={product.productLineName}
               />
             ))}
           </ul>

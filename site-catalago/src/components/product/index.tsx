@@ -16,10 +16,18 @@ function BoxProduct({ id, img, name }: Product) {
   return (
     <div
       onClick={goToProduct}
-      className="flex flex-col items-center  h-52  w-60 p-4 rounded-2xl shadow-[2px_2px_7px_-4px_#ff0000] hover:shadow-[-4px_-4px_10px_-4px_#ff0000] duration-700 transition-all cursor-pointer select-none"
+      className="w-48 h-64 cursor-pointer rounded-2xl shadow-[2px_2px_0px_-1px_#d0d0d0] hover:shadow-[6px_6px_0px_-1px_#d0d0d0] duration-700 transition-all p-2 bg-white"
     >
-      <img src={img} alt={name} className="w-36" />
-      <h1 className="text-[18px] font-bold">{name}</h1>
+      <div className="flex flex-col items-center h-full">
+        <img
+          src={img}
+          alt={name}
+          className="w-full h-40 object-contain rounded-lg"
+        />
+        <h1 className="mt-2 text-center text-sm font-bold text-gray-800 line-clamp-2">
+          {name}
+        </h1>
+      </div>
     </div>
   );
 }

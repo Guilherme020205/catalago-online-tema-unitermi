@@ -1,7 +1,8 @@
+import { ToastContainer, toast } from "react-toastify";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import ReCAPTCHA from "react-google-recaptcha";
-import "./FormContact.css"; // Aqui você mantém seu CSS normal
+import "./FormContact.css";
 
 function FormContact() {
   const [name, setName] = useState("");
@@ -13,21 +14,17 @@ function FormContact() {
   const [subject, setSubject] = useState("");
   const [mensagem, setMensagem] = useState("");
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
+  const [isSending, setIsSending] = useState(false);  
 
-  function sendEmail(e: React.FormEvent<HTMLFormElement>) {
+  async function sendEmail(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (!captchaValue) {
-      alert("Por favor, confirme o reCAPTCHA");
-      return;
-    }
-
-    if (name === "" || email === "") {
-      alert("Preencha todos os campos");
+      toast.error("Por favor, confirme o reCAPTCHA!");
       return;
     }
     if (!email.includes("@")) {
-      alert("Email inválido");
+      toast.error("Email inválido");
       return;
     }
 
@@ -42,34 +39,39 @@ function FormContact() {
       mensagem,
     };
 
-    emailjs
-      .send(
+    try {
+      setIsSending(true); 
+      const response = await emailjs.send(
         "service_t8ht1ut",
         "template_mhkuela",
         templateParams,
         "BBYHR2ney7UO0Cryo"
-      )
-      .then(
-        (response) => {
-          console.log("email enviado", response.status, response.text);
-          setName("");
-          setEmail("");
-          setTel("");
-          setCnpj("");
-          setUf("");
-          setCidade("");
-          setSubject("");
-          setMensagem("");
-          setCaptchaValue(null);
-        },
-        (err) => {
-          console.log(err);
-        }
       );
+      console.log("email enviado", response.status, response.text);
+
+      // Limpa campos
+      setName("");
+      setEmail("");
+      setTel("");
+      setCnpj("");
+      setUf("");
+      setCidade("");
+      setSubject("");
+      setMensagem("");
+      setCaptchaValue(null);
+
+      toast.success("Email enviado com sucesso!");
+    } catch (err) {
+      console.log(err);
+      toast.error("Erro ao enviar o email.");
+    } finally {
+      setIsSending(false); 
+    }
   }
 
   return (
     <div className="flex flex-col border-1 border-web-red px-10 pt-10 pb-10 w-[500px]">
+      <ToastContainer />
       <h1 className="text-2xl text-web-red font-bold mb-5">Entre em Contato</h1>
 
       <form onSubmit={sendEmail}>
@@ -172,11 +174,15 @@ function FormContact() {
           onChange={(value) => setCaptchaValue(value)}
         />
 
-        <input
-          className="cursor-pointer text-web-red my-20 py-5 px-36 rounded-2xl shadow-[2px_2px_7px_-2px_#ff0000] hover:bg-web-pink hover:shadow-[2px_2px_7px_-2px_#000] transition-all duration-700"
+        <button
           type="submit"
-          value="Enviar"
-        />
+          disabled={isSending}
+          className={`cursor-pointer text-web-red my-20 py-5 px-36 rounded-2xl shadow-[2px_2px_7px_-2px_#ff0000] hover:bg-web-pink hover:shadow-[2px_2px_7px_-2px_#000] transition-all duration-700 ${
+            isSending ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        >
+          {isSending ? "Enviando..." : "Enviar"}
+        </button>
       </form>
     </div>
   );
