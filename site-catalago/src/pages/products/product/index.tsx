@@ -31,29 +31,28 @@ function ScreenProduct() {
   const [selectedColorId, setSelectedColorId] = useState<string | null>(null);
 
   useEffect(() => {
-  if (!id) return;
+    if (!id) return;
 
-  // limpa os dados para forçar recarregar
-  setProduct(null);
-  setVariations([]);
-  setSelectedColorId(null);
+    // limpa os dados para forçar recarregar
+    setProduct(null);
+    setVariations([]);
+    setSelectedColorId(null);
 
-  const fetchProduct = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:3000/GetProductDetail/${id}`
-      );
-      setProduct(res.data.product);
-      setVariations(res.data.variations);
-      setSelectedColorId(res.data.product.ColorLine?.id || null);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    const fetchProduct = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:3000/GetProductDetail/${id}`
+        );
+        setProduct(res.data.product);
+        setVariations(res.data.variations);
+        setSelectedColorId(res.data.product.ColorLine?.id || null);
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-  fetchProduct();
-}, [id]);
-
+    fetchProduct();
+  }, [id]);
 
   if (!product) return <p>Carregando...</p>;
 
@@ -106,10 +105,10 @@ function ScreenProduct() {
       <div className="flex flex-col mx-52 mt-12">
         <div className="flex flex-row gap-20">
           <Zoom>
-            <img src={product.Image} alt={product.name} className="w-[500px]" />
+            <img src={product.Image} alt={product.name} className="w-[400px]" />
           </Zoom>
 
-          <div>
+          <div className="min-w-[1000px]">
             <h1 className="text-web-red w-[45%] font-bold text-4xl mb-4">
               {product.name}
             </h1>
