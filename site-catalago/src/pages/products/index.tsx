@@ -33,7 +33,6 @@ function ScreenProducts() {
     }
   };
 
-  // Quando a categoria mudar, reseta página pra 1
   useEffect(() => {
     if (selectedCategory) {
       setPage(1);
@@ -45,7 +44,6 @@ function ScreenProducts() {
     listCategory();
   }, []);
 
-  // Sempre que mudar a página, carrega novos produtos
   useEffect(() => {
     if (selectedCategory) {
       listProduct(selectedCategory, page);
@@ -54,7 +52,6 @@ function ScreenProducts() {
 
   return (
     <div>
-      {/* categorias */}
       <div>
         <ul className="flex justify-center bg-web-pink">
           {categorys.map((category: any) => (
@@ -77,7 +74,10 @@ function ScreenProducts() {
       {/* produtos */}
       <div className="flex justify-center mt-12 min-h-[500px]">
         {products.length === 0 ? (
-          <p className="flex text-center w-96">Pedimos desculpas, mas não encontramos produtos cadastrados nessa categori...</p>
+          <p className="flex text-center w-96">
+            Pedimos desculpas, mas não encontramos produtos cadastrados nessa
+            categori...
+          </p>
         ) : (
           <ul className="grid grid-cols-4 gap-20">
             {products.map((product: any) => (
@@ -94,26 +94,32 @@ function ScreenProducts() {
 
       {/* paginação */}
       <div className="flex justify-center items-center mt-10 gap-4">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage(page - 1)}
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50 disabled:cursor-no-drop cursor-pointer"
-        >
-          Anterior
-        </button>
+        {products.length === 0 ? (
+          <p></p>
+        ) : (
+          <div>
+            <button
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+              className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50 disabled:cursor-no-drop cursor-pointer"
+            >
+              Anterior
+            </button>
 
-        <span>
-          Página <strong>{page}</strong> de{" "}
-          <strong>{pagination.totalPages}</strong>
-        </span>
+            <span className="px-5">    
+              Página <strong>{page}</strong> de{" "}
+              <strong>{pagination.totalPages}</strong>
+            </span>
 
-        <button
-          disabled={page === pagination.totalPages}
-          onClick={() => setPage(page + 1)}
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50 disabled:cursor-no-drop cursor-pointer"
-        >
-          Próxima
-        </button>
+            <button
+              disabled={page === pagination.totalPages}
+              onClick={() => setPage(page + 1)}
+              className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50 disabled:cursor-no-drop cursor-pointer"
+            >
+              Próxima
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
