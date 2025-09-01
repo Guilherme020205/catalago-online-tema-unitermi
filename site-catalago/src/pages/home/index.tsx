@@ -26,9 +26,13 @@ function ScreenHome() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col items-center my-10 mx-20 select-none">
+    <div className="flex flex-col items-center my-10 mx-10 md:mx-20 select-none">
       <About />
-      <div className="flex flex-rox justify-center gap-20 my-10 animate-fade animate-duration-1000 animate-delay-2000">
+      <div
+        className="flex flex-col justify-center gap-20 my-10 animate-fade animate-duration-1000 animate-delay-2000
+        md:flex-row
+      "
+      >
         <div className="w-96">
           <Carrossel autoSlide={true} autoSlideInterval={5000}>
             {slides.map((s, i) => (
@@ -37,7 +41,11 @@ function ScreenHome() {
           </Carrossel>
         </div>
         <div>
-          <p className="w-[500px] text-[20px]">
+          <p
+            className="mx-5 text-[20px]
+          md:mx-0 md:w-[500px] md:text-[20px]
+          "
+          >
             <strong className="text-web-red">Unitermi</strong> oferece uma linha
             completa de produtos térmicos e utilitários, combinando inovação,
             qualidade e design sofisticado, para que você tenha praticidade,
@@ -50,15 +58,16 @@ function ScreenHome() {
       </div>
       <button
         onClick={() => navigate("/produtos")}
-        className="flex flex-row items-center gap-5 cursor-pointer text-web-red my-32 py-5 px-36 rounded-2xl shadow-[2px_2px_7px_-2px_#ff0000] hover:bg-web-pink hover:shadow-[2px_2px_7px_-2px_#000] transition-all duration-700 animate-fade-up animate-once animate-duration-1000 animate-delay-1000
-"
+        className="flex flex-row items-center gap-5 cursor-pointer text-web-red my-32 py-5 px-10 rounded-2xl shadow-[2px_2px_7px_-2px_#ff0000] hover:bg-web-pink hover:shadow-[2px_2px_7px_-2px_#000] transition-all duration-700 animate-fade-up animate-once animate-duration-1000 animate-delay-1000
+            xl:px-36
+        "
       >
         <IoBagHandle className="text-5xl" />
         <p className="flex flex-col items-start gap-0 text-2xl">
           Conheça nossos <strong className="text-3xl">Produtos</strong>
         </p>
       </button>
-      <WhoWeAre />
+      {/* <WhoWeAre /> */}
     </div>
   );
 }
