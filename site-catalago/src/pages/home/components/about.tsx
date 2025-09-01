@@ -11,7 +11,10 @@ function About() {
 
   return (
     <div className="text-[12px] font-bold text-web-red">
-      <section className="flex flex-row gap-8">
+      <section
+        className="grid grid-cols-2 gap-4 
+        xl:grid-cols-6 xl:gap-8"
+      >
         <div className="cardAbout animate-fade-right animate-duration-1000 animate-delay-500">
           <p className="mb-2">Indústria Brasileira</p>
           <div className="py-2">
@@ -59,7 +62,9 @@ function About() {
           <p className="mb-2">com clientes</p>
           <div className="flex flex-row items-center py-2 gap-5">
             <MdRocketLaunch className="text-5xl " />
-            <p className="font-bold"><strong className="text-2xl">10</strong> Anos</p>
+            <p className="font-bold">
+              <strong className="text-2xl">10</strong> Anos
+            </p>
           </div>
         </div>
       </section>
