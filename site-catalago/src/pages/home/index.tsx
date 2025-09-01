@@ -67,7 +67,7 @@ function ScreenHome() {
           Conheça nossos <strong className="text-3xl">Produtos</strong>
         </p>
       </button>
-      {/* <WhoWeAre /> */}
+      <WhoWeAre />
     </div>
   );
 }
