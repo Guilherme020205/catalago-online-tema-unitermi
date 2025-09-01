@@ -6,9 +6,13 @@ function whoWeAre() {
     <div>
       <h1 className="ml-5 text-2xl text-web-red">Quem somos</h1>
 
-      <div className="flex flex-row gap-10">
+      <div
+        className="flex flex-col gap-10
+      xl:flex-row
+      "
+      >
         <div className="flex flex-col my-5 gap-10">
-          <div className="flex flex-col w-[700px]">
+          <div className="flex flex-col">
             <p className="text-web-red text-3xl font-bold ml-2 mb-3">
               Nós preservamos o que é bom!
             </p>
@@ -31,16 +35,29 @@ function whoWeAre() {
             </p>
           </div>
           <div>
-            <img src={imagem2} alt="imagem" className="w-[700px]" />
+            <img
+              src={imagem2}
+              alt="imagem"
+              className="w-[700px] hidden md:block"
+            />
+            <img
+              src={imagem1}
+              alt="imagem"
+              className="w-[700px] block md:hidden"
+            />
           </div>
         </div>
 
         <div className="flex flex-col my-5 gap-10">
           <div>
-            <img src={imagem1} alt="imagem" className="w-[700px]" />
+            <img
+              src={imagem1}
+              alt="imagem"
+              className="w-[700px] hidden md:block"
+            />
           </div>
-          <div className="flex flex-col w-[700px]">
-            <p className="text-web-red text-3xl font-bold ml-2 mb-3">
+          <div className="flex flex-col">
+            <p className="text-web-red text-3md font-bold ml-2 mb-3">
               SUSTENTABILIDADE
             </p>
             <p className="mb-2">
@@ -61,6 +78,13 @@ function whoWeAre() {
               reciclada, utilizando mais de 600 toneladas de plástico reciclado
               anualmente.
             </p>
+          </div>
+          <div>
+            <img
+              src={imagem2}
+              alt="imagem"
+              className="w-[700px] block md:hidden"
+            />
           </div>
         </div>
       </div>
