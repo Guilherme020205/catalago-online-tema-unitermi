@@ -26,11 +26,11 @@ function ScreenHome() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col items-center my-10 mx-10 md:mx-20 select-none">
+    <div className="flex flex-col items-center my-10 mx-10 lg:mx-20 select-none">
       <About />
       <div
         className="flex flex-col justify-center gap-20 my-10 animate-fade animate-duration-1000 animate-delay-2000
-        md:flex-row
+        lg:flex-row
       "
       >
         <div className="w-96">
@@ -40,10 +40,10 @@ function ScreenHome() {
             ))}
           </Carrossel>
         </div>
-        <div>
+        <div className="flex flex-col items-center lg:items-start">
           <p
             className="mx-5 text-[20px]
-          md:mx-0 md:w-[500px] md:text-[20px]
+          lg:mx-0 lg:w-[500px] lg:text-[20px]
           "
           >
             <strong className="text-web-red">Unitermi</strong> oferece uma linha
