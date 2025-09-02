@@ -1,10 +1,7 @@
-import Zoom from "react-medium-image-zoom";
-import "react-medium-image-zoom/dist/styles.css"; // Importa o CSS
-
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Suggestions from "./components/suggestions";
+import { api } from "../../../service/api";
 interface Product {
   id: string;
   name: string;
@@ -40,9 +37,7 @@ function ScreenProduct() {
 
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:3000/GetProductDetail/${id}`
-        );
+        const res = await api.get(`/GetProductDetail/${id}`);
         setProduct(res.data.product);
         setVariations(res.data.variations);
         setSelectedColorId(res.data.product.ColorLine?.id || null);
@@ -104,9 +99,7 @@ function ScreenProduct() {
     <div className="p-6">
       <div className="flex flex-col mx-52 mt-12">
         <div className="flex flex-row gap-20">
-          <Zoom>
-            <img src={product.Image} alt={product.name} className="w-[400px]" />
-          </Zoom>
+          <img src={product.Image} alt={product.name} className="w-[40px] h-[40px]" />
 
           <div className="min-w-[1000px]">
             <h1 className="text-web-red w-[45%] font-bold text-4xl mb-4">
