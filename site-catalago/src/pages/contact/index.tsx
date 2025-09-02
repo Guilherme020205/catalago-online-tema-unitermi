@@ -1,5 +1,5 @@
 import { useState } from "react";
-import FormContact from "./form";
+import FormContact from "./components/form";
 import {
   FaFacebookSquare,
   FaInstagramSquare,
