@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Suggestions from "./components/suggestions";
 import { api } from "../../../service/api";
+import LoadingIcon from "../../../components/loadings/loadingIcon";
 interface Product {
   id: string;
   name: string;
@@ -49,8 +50,12 @@ function ScreenProduct() {
     fetchProduct();
   }, [id]);
 
-  if (!product) return <p>Carregando...</p>;
-
+  if (!product)
+    return (
+      <div className="flex justify-center items-center mt-20">
+        <LoadingIcon />
+      </div>
+    );
   // Capacidades únicas
   const capacities = Array.from(
     new Set(variations.map((v) => v.ProductCapacity?.capacity))
@@ -96,25 +101,107 @@ function ScreenProduct() {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex flex-col mx-52 mt-12">
-        <div className="flex flex-row gap-20">
-          <img src={product.Image} alt={product.name} className="w-[40px] h-[40px]" />
+    <div className="m-5">
+      <div>
+        <div className="flex flex-col md:flex-row md:gap-10 md:items-center">
+          <img
+            src={product.Image}
+            alt={product.name}
+            className="w-[300px] h-[300px]"
+          />
 
-          <div className="min-w-[1000px]">
-            <h1 className="text-web-red w-[45%] font-bold text-4xl mb-4">
+          <div>
+            <h1 className="text-web-red font-bold text-4xl mb-4">
               {product.name}
             </h1>
-            <p className="text-black w-[70%] mb-4">{product.description}</p>
+            <p className="text-black md:w-[70%] mb-4">{product.description}</p>
 
-            <hr className="text-web-red w-[50%] mb-4" />
+            <hr className="text-web-red mb-4" />
 
-            <div className="bg-web-gray w-[50%] flex flex-col rounded-[10px] px-5 py-5 gap-5 select-none">
+            <div className="bg-web-gray w-max max-w-full md:max-w-[400px] lg:max-w-[600px] flex flex-col rounded-[10px] pl-5   py-5 gap-5 select-none">
               <section>
                 <h2 className="font-bold text-web-red text-2xl">
                   Modelos disponíveis:
                 </h2>
 
+                {capacities.map((cap) => (
+                  <button
+                    key={cap}
+                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
+                      cap === product.ProductCapacity?.capacity
+                        ? "bg-web-pink text-web-red font-bold border-1"
+                        : "bg-web-red text-white"
+                    }`}
+                    onClick={() => handleCapacityClick(cap)}
+                  >
+                    {cap}
+                  </button>
+                ))}
+                {capacities.map((cap) => (
+                  <button
+                    key={cap}
+                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
+                      cap === product.ProductCapacity?.capacity
+                        ? "bg-web-pink text-web-red font-bold border-1"
+                        : "bg-web-red text-white"
+                    }`}
+                    onClick={() => handleCapacityClick(cap)}
+                  >
+                    {cap}
+                  </button>
+                ))}
+                {capacities.map((cap) => (
+                  <button
+                    key={cap}
+                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
+                      cap === product.ProductCapacity?.capacity
+                        ? "bg-web-pink text-web-red font-bold border-1"
+                        : "bg-web-red text-white"
+                    }`}
+                    onClick={() => handleCapacityClick(cap)}
+                  >
+                    {cap}
+                  </button>
+                ))}
+                {capacities.map((cap) => (
+                  <button
+                    key={cap}
+                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
+                      cap === product.ProductCapacity?.capacity
+                        ? "bg-web-pink text-web-red font-bold border-1"
+                        : "bg-web-red text-white"
+                    }`}
+                    onClick={() => handleCapacityClick(cap)}
+                  >
+                    {cap}
+                  </button>
+                ))}
+                {capacities.map((cap) => (
+                  <button
+                    key={cap}
+                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
+                      cap === product.ProductCapacity?.capacity
+                        ? "bg-web-pink text-web-red font-bold border-1"
+                        : "bg-web-red text-white"
+                    }`}
+                    onClick={() => handleCapacityClick(cap)}
+                  >
+                    {cap}
+                  </button>
+                ))}
+                {capacities.map((cap) => (
+                  <button
+                    key={cap}
+                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
+                      cap === product.ProductCapacity?.capacity
+                        ? "bg-web-pink text-web-red font-bold border-1"
+                        : "bg-web-red text-white"
+                    }`}
+                    onClick={() => handleCapacityClick(cap)}
+                  >
+                    {cap}
+                  </button>
+                ))}
                 {capacities.map((cap) => (
                   <button
                     key={cap}
@@ -149,6 +236,7 @@ function ScreenProduct() {
             </div>
           </div>
         </div>
+
         <section className="flex flex-col py-10">
           <h1 className="text-web-red font-bold text-2xl mb-5">Descrição: </h1>
           <p>Capacidade: {product.ProductCapacity.capacity}</p>
@@ -165,7 +253,7 @@ function ScreenProduct() {
 
         <hr className="text-web-red w-full" />
       </div>
-      <div className="flex flex-col gap-10 my-20 mx-80">
+      <div className="flex flex-col gap-10 ">
         <div className="flex flex-col gap-2">
           <p className="text-web-red font-bold text-2xl mb-5">Relacionados:</p>
           <Suggestions categoryId={product.Category.id} />
