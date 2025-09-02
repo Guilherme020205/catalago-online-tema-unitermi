@@ -20,7 +20,7 @@ function Header() {
     >
       <img src={slogan1} alt="slogan1" className="w-40 xl:w-36 2xl:w-56" />
 
-      <div className="flex justify-center gap-2 my-5 md:my-0">
+      <div className="flex justify-center gap-2 my-5 lg:my-0">
         {links.map(({ path, label }) => {
           const isActive = location.pathname === path;
           return (
