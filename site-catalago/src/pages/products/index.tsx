@@ -62,15 +62,15 @@ function ScreenProducts() {
   }, [page]);
 
   return (
-  <div className="flex">
-    <Menu
-      categorys={categorys}
-      selectedCategory={selectedCategory}
-      setSelectedCategory={setSelectedCategory}
-      loadingCategories={loadingCategories}
-    />
+    <div className="flex">
+      <Menu
+        categorys={categorys}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        loadingCategories={loadingCategories}
+      />
 
-    <div className="flex-1 mr-10 mt-10 md:mt-0">
+      <div className="flex-1 mr-10 mt-10 md:mt-0">
         <div className="flex justify-center mt-12 min-h-[200px]">
           {loadingProducts ? (
             <LoadingIcon />
@@ -92,9 +92,9 @@ function ScreenProducts() {
           )}
         </div>
 
-        <div className="flex flex-row justify-center items-center mt-10 gap-4">
+        <div>
           {products.length > 0 && (
-            <div>
+            <div className="flex flex-row justify-center items-center mt-10 gap-4">
               <button
                 disabled={page === 1}
                 onClick={() => setPage(page - 1)}
@@ -103,9 +103,12 @@ function ScreenProducts() {
                 Anterior
               </button>
 
-              <span className="px-5">
-                Página <strong>{page}</strong> de{" "}
-                <strong>{pagination.totalPages}</strong>
+              <span className="flex flex-col gap-0">
+                <p>Página</p>
+                <p>
+                  <strong>{page}</strong> de{" "}
+                  <strong>{pagination.totalPages}</strong>
+                </p>
               </span>
 
               <button
