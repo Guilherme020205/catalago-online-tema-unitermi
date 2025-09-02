@@ -38,12 +38,12 @@ function whoWeAre() {
             <img
               src={imagem2}
               alt="imagem"
-              className="w-[700px] hidden md:block"
+              className="w-[700px] hidden lg:block"
             />
             <img
               src={imagem1}
               alt="imagem"
-              className="w-[700px] block md:hidden"
+              className="w-[700px] block lg:hidden"
             />
           </div>
         </div>
@@ -53,7 +53,7 @@ function whoWeAre() {
             <img
               src={imagem1}
               alt="imagem"
-              className="w-[700px] hidden md:block"
+              className="w-[700px] hidden lg:block"
             />
           </div>
           <div className="flex flex-col">
@@ -83,7 +83,7 @@ function whoWeAre() {
             <img
               src={imagem2}
               alt="imagem"
-              className="w-[700px] block md:hidden"
+              className="w-[700px] block lg:hidden"
             />
           </div>
         </div>
