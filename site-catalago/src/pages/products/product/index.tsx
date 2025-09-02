@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Suggestions from "./components/suggestions";
 import { api } from "../../../service/api";
 import LoadingIcon from "../../../components/loadings/loadingIcon";
+import useResponsiveLimit from "./components/defLimit";
 interface Product {
   id: string;
   name: string;
@@ -22,6 +23,8 @@ interface Product {
 }
 
 function ScreenProduct() {
+  const responsiveLimit = useResponsiveLimit();
+
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
@@ -111,97 +114,19 @@ function ScreenProduct() {
           />
 
           <div>
-            <h1 className="text-web-red font-bold text-4xl mb-4">
+            <h1 className="text-web-red font-bold text-4xl mt-10 md:mt-0 mb-4">
               {product.name}
             </h1>
             <p className="text-black md:w-[70%] mb-4">{product.description}</p>
 
             <hr className="text-web-red mb-4" />
 
-            <div className="bg-web-gray w-max max-w-full md:max-w-[400px] lg:max-w-[600px] flex flex-col rounded-[10px] pl-5   py-5 gap-5 select-none">
+            <div className="bg-web-gray w-max max-w-full md:max-w-[400px] lg:max-w-[600px] flex flex-col rounded-[10px] px-5 py-5 gap-5 select-none">
               <section>
                 <h2 className="font-bold text-web-red text-2xl">
                   Modelos disponíveis:
                 </h2>
 
-                {capacities.map((cap) => (
-                  <button
-                    key={cap}
-                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
-                      cap === product.ProductCapacity?.capacity
-                        ? "bg-web-pink text-web-red font-bold border-1"
-                        : "bg-web-red text-white"
-                    }`}
-                    onClick={() => handleCapacityClick(cap)}
-                  >
-                    {cap}
-                  </button>
-                ))}
-                {capacities.map((cap) => (
-                  <button
-                    key={cap}
-                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
-                      cap === product.ProductCapacity?.capacity
-                        ? "bg-web-pink text-web-red font-bold border-1"
-                        : "bg-web-red text-white"
-                    }`}
-                    onClick={() => handleCapacityClick(cap)}
-                  >
-                    {cap}
-                  </button>
-                ))}
-                {capacities.map((cap) => (
-                  <button
-                    key={cap}
-                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
-                      cap === product.ProductCapacity?.capacity
-                        ? "bg-web-pink text-web-red font-bold border-1"
-                        : "bg-web-red text-white"
-                    }`}
-                    onClick={() => handleCapacityClick(cap)}
-                  >
-                    {cap}
-                  </button>
-                ))}
-                {capacities.map((cap) => (
-                  <button
-                    key={cap}
-                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
-                      cap === product.ProductCapacity?.capacity
-                        ? "bg-web-pink text-web-red font-bold border-1"
-                        : "bg-web-red text-white"
-                    }`}
-                    onClick={() => handleCapacityClick(cap)}
-                  >
-                    {cap}
-                  </button>
-                ))}
-                {capacities.map((cap) => (
-                  <button
-                    key={cap}
-                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
-                      cap === product.ProductCapacity?.capacity
-                        ? "bg-web-pink text-web-red font-bold border-1"
-                        : "bg-web-red text-white"
-                    }`}
-                    onClick={() => handleCapacityClick(cap)}
-                  >
-                    {cap}
-                  </button>
-                ))}
-                {capacities.map((cap) => (
-                  <button
-                    key={cap}
-                    className={`mr-3 mt-2 px-5 py-1 rounded cursor-pointer ${
-                      cap === product.ProductCapacity?.capacity
-                        ? "bg-web-pink text-web-red font-bold border-1"
-                        : "bg-web-red text-white"
-                    }`}
-                    onClick={() => handleCapacityClick(cap)}
-                  >
-                    {cap}
-                  </button>
-                ))}
                 {capacities.map((cap) => (
                   <button
                     key={cap}
@@ -253,14 +178,17 @@ function ScreenProduct() {
 
         <hr className="text-web-red w-full" />
       </div>
-      <div className="flex flex-col gap-10 ">
+      <div className="flex flex-col gap-10 mt-5 ">
         <div className="flex flex-col gap-2">
           <p className="text-web-red font-bold text-2xl mb-5">Relacionados:</p>
-          <Suggestions categoryId={product.Category.id} />
+          <Suggestions
+            categoryId={product.Category.id}
+            limit={responsiveLimit}
+          />
         </div>
         <div className="flex flex-col gap-2">
           <p className="text-web-red font-bold text-2xl mb-5">Outros:</p>
-          <Suggestions categoryId="" />
+          <Suggestions categoryId="" limit={responsiveLimit} />
         </div>
       </div>
     </div>
