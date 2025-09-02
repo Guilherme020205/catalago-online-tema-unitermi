@@ -21,8 +21,8 @@ function ScreenContact() {
   };
 
   return (
-    <div className="flex flex-row justify-center gap-96 mx-20 my-10">
-      <section className="mt-20">
+    <div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-20 my-5 ">
+      <section>
         <h1 className="text-2xl text-web-red font-bold">Redes sociais: </h1>
         <div className="flex flex-row gap-4 ml-5 my-5">
           <a href="https://www.facebook.com/unitermioficial" target="_blank">
@@ -69,8 +69,7 @@ function ScreenContact() {
         <div className="ml-5 my-5">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3523.857335800934!2d-48.668304899999995!3d-27.967655099999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x952734f2eee24629%3A0x821ded38b70a4964!2sUnitermi!5e0!3m2!1spt-BR!2sbr!4v1756337557952!5m2!1spt-BR!2sbr"
-            width="400"
-            height="400"
+            className="w-[300px] h-[300px]"
             loading="lazy"
           ></iframe>
         </div>

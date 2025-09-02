@@ -70,7 +70,7 @@ function FormContact() {
   }
 
   return (
-    <div className="flex flex-col border-1 border-web-red px-10 pt-10 pb-10 w-[500px]">
+    <div className="flex flex-col border-1 border-web-red px-5 md:px-10 pt-10  w-min">
       <ToastContainer />
       <h1 className="text-2xl text-web-red font-bold mb-5">Entre em Contato</h1>
 
