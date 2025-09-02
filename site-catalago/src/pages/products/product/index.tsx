@@ -114,7 +114,7 @@ function ScreenProduct() {
           />
 
           <div>
-            <h1 className="text-web-red font-bold text-4xl w-[98%] break-words mt-10  md:mt-0 mb-4">
+            <h1 className="text-web-red font-bold text-4xl w-[90%] break-words mt-10  md:mt-0 mb-4">
               {product.name}
             </h1>
             <p className="text-black md:w-[70%] mb-4">{product.description}</p>
