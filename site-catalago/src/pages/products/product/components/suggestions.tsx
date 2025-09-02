@@ -39,7 +39,7 @@ function Suggestions({ categoryId, limit }: Info) {
         ) : products.length === 0 ? (
           <p>Pedimos desculpas, mas não encontramos produtos...</p>
         ) : (
-          <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-5 md:gap-14 lg:gap-20">
+          <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-14 lg:gap-20">
             {products.map((product: any) => (
               <BoxProduct
                 key={product.id}
