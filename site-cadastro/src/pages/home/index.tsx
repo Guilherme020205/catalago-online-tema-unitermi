@@ -5,7 +5,7 @@ const ScreenHome = () => {
 
   return (
     <div className="flex mt-20 justify-center ">
-      <div className="grid grid-cols-2 gap-10">
+      <div className="flex flex-col md:grid md:grid-cols-2 gap-10">
         <button onClick={() => navigate("/categorys")} className="buttonHome select-none">
           Categoria
         </button>
