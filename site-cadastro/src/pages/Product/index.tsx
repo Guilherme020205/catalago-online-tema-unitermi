@@ -57,7 +57,7 @@ const ScreenProduct = () => {
   }, [search, page]);
 
   return (
-    <div className="flex flex-col m-20">
+    <div className="flex flex-col m-5 md:m-20">
       <div className="flex justify-between items-center mb-6">
         <p className="text-2xl font-bold select-none">Produtos</p>
         <button
@@ -91,7 +91,7 @@ const ScreenProduct = () => {
         {products.map((product) => (
           <li
             key={product.id}
-            className="flex justify-between my-2 p-2 border rounded-lg"
+            className="flex flex-row gap-4 justify-between my-2 p-2 border rounded-lg break-all"
           >
             <div className="flex gap-4">
               {product.Image && (
@@ -111,7 +111,7 @@ const ScreenProduct = () => {
                 </p>
               </div>
             </div>
-            <div className="flex gap-3 items-center">
+            <div className="flex gap-5 mt-5 items-start">
               <button
                 onClick={() => navigate(`/edit-product/${product.id}`)}
                 className="text-blue-500 cursor-pointer"
