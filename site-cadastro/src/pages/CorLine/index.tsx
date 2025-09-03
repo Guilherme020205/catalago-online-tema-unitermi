@@ -61,24 +61,26 @@ const ScreenCorLine = () => {
   }, []);
 
   return (
-    <div className="flex flex-col m-20">
+    <div className="flex flex-col m-5 md:m-20">
       <p className="text-2xl font-bold select-none">Cores</p>
 
-      <div className="flex flex-row gap-2 mt-6">
-        <input
-          type="text"
-          value={nameColor}
-          onChange={(e) => setNameColor(e.target.value)}
-          placeholder="Nome da cor..."
-          className="border p-2 rounded-lg"
-        />
-        <input
-          type="text"
-          value={codeColor}
-          onChange={(e) => setCodeColor(e.target.value)}
-          placeholder="Código da cor (ex: #FF0000)"
-          className="border p-2 rounded-lg"
-        />
+      <div className="flex flex-col md:flex-row gap-2 mt-6">
+        <div className="flex flex-col md:flex-row gap-2">
+          <input
+            type="text"
+            value={nameColor}
+            onChange={(e) => setNameColor(e.target.value)}
+            placeholder="Nome da cor..."
+            className="border p-2 rounded-lg"
+          />
+          <input
+            type="text"
+            value={codeColor}
+            onChange={(e) => setCodeColor(e.target.value)}
+            placeholder="Código da cor (ex: #FF0000)"
+            className="border p-2 rounded-lg"
+          />
+        </div>
         <button
           onClick={createColor}
           className="bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer"
@@ -91,10 +93,10 @@ const ScreenCorLine = () => {
         <section className="bg-web-gray rounded-2xl p-4">
           <ul>
             {colors.map((color: any) => (
-              <li key={color.id} className="w-[600px]">
+              <li key={color.id} className="w-80 md:w-[600px]">
                 <div className="flex justify-between items-center w-full my-2">
                   {editId === color.id ? (
-                    <div className="flex gap-2 w-full">
+                    <div className="flex flex-col gap-2 w-full">
                       <input
                         type="text"
                         value={editName}
@@ -126,7 +128,7 @@ const ScreenCorLine = () => {
                     </div>
                   ) : (
                     <>
-                      <div className="flex gap-4 items-center">
+                      <div className="flex flex-row gap-4 items-center">
                         <p>{color.name}</p>
                         <div
                           className="w-6 h-6 rounded-full border"
