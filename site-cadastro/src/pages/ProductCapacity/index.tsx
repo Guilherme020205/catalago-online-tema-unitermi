@@ -53,7 +53,7 @@ const ScreenProductCapacity = () => {
   }, []);
 
   return (
-    <div className="flex flex-col m-20">
+    <div className="flex flex-col m-5 md:m-20">
       <p className="text-2xl font-bold select-none">Litragem dos Produtos</p>
 
       <div className="flex flex-row gap-2 mt-6">
@@ -76,10 +76,10 @@ const ScreenProductCapacity = () => {
         <section className="bg-web-gray rounded-2xl p-4">
           <ul>
             {capacities.map((capacity: any) => (
-              <li key={capacity.id} className="w-[600px]">
+              <li key={capacity.id} className="w-80 md:w-[600px]">
                 <div className="flex justify-between w-full my-2">
                   {editId === capacity.id ? (
-                    <div className="flex gap-2 w-full">
+                    <div className="flex flex-col gap-2 w-full">
                       <input
                         type="text"
                         value={editValue}
