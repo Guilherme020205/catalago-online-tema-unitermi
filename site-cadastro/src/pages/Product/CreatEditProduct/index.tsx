@@ -1,6 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../../../service/api";
+
+type Combo = {
+  productId: string;
+  categoryId: string;
+  lineId: string;
+  colorLineId: string;
+  productCapacityId: string | null;
+};
+
+const toStr = (v: any) => (v === null || v === undefined ? "" : String(v));
 
 const ProductFormScreen = () => {
   const { id } = useParams();
@@ -30,9 +40,8 @@ const ProductFormScreen = () => {
   const [ncm, setNcm] = useState("");
   const [ean, setEan] = useState("");
 
-  const [usedCombinations, setUsedCombinations] = useState<
-    { colorLineId: string; productCapacityId: string | null }[]
-  >([]);
+  // Combinações usadas (sempre apenas da categoria + linha selecionadas)
+  const [usedCombinations, setUsedCombinations] = useState<Combo[]>([]);
 
   // Carrega listas
   useEffect(() => {
@@ -52,10 +61,10 @@ const ProductFormScreen = () => {
       const p = res.data.product;
       setName(p.name);
       setDescription(p.description);
-      setSelectedCategory(p.idCategory);
-      setSelectedLine(p.idProductLine);
-      setSelectedColor(p.colorLineId);
-      setSelectedCapacity(p.productCapacityId);
+      setSelectedCategory(toStr(p.idCategory));
+      setSelectedLine(toStr(p.idProductLine));
+      setSelectedColor(toStr(p.colorLineId));
+      setSelectedCapacity(p.productCapacityId ? toStr(p.productCapacityId) : null);
       setDimensions(p.Dimensions);
       setMaterials(p.Materials);
       setOtherFeatures(p.OtherFeatures);
@@ -67,7 +76,7 @@ const ProductFormScreen = () => {
     });
   }, [id]);
 
-  // Busca combinações já usadas para bloquear duplicidade
+  // Busca combinações já usadas — com filtro DEFENSIVO no cliente
   useEffect(() => {
     if (!selectedCategory || !selectedLine) {
       setUsedCombinations([]);
@@ -76,16 +85,39 @@ const ProductFormScreen = () => {
 
     api
       .get("/listProducts", {
-        params: { idCategory: selectedCategory, idLine: selectedLine },
+        params: {
+          idCategory: selectedCategory,
+          idLine: selectedLine,
+        },
       })
       .then((res) => {
-        const combos = res.data.products.map((p: any) => ({
-          colorLineId: p.colorLineId,
-          productCapacityId: p.productCapacityId,
-        }));
-        setUsedCombinations(combos);
+        const products = Array.isArray(res.data?.products)
+          ? res.data.products
+          : [];
+
+        // Normaliza e filtra NO CLIENTE por categoria + linha (caso o backend ignore os params)
+        const filtered = products
+          .map((p: any) => ({
+            productId: toStr(p.id),
+            categoryId: toStr(p.idCategory ?? p.categoryId),
+            lineId: toStr(p.idProductLine ?? p.productLineId),
+            colorLineId: toStr(p.colorLineId),
+            productCapacityId:
+              p.productCapacityId !== null && p.productCapacityId !== undefined
+                ? toStr(p.productCapacityId)
+                : null,
+          }))
+          .filter(
+            (x: Combo) =>
+              x.categoryId === toStr(selectedCategory) &&
+              x.lineId === toStr(selectedLine)
+          )
+          // quando editando, não deve bloquear a própria combinação do produto sendo editado
+          .filter((x: Combo) => !id || x.productId !== toStr(id));
+
+        setUsedCombinations(filtered);
       });
-  }, [selectedCategory, selectedLine]);
+  }, [selectedCategory, selectedLine, id]);
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -94,30 +126,80 @@ const ProductFormScreen = () => {
     setImagePreview(URL.createObjectURL(file));
   }
 
+  // Sets de bloqueio calculados com base APENAS nas combinações válidas para a categoria + linha
+  const disabledCapacityIds = useMemo(() => {
+    if (!selectedColor) return new Set<string>();
+    const set = new Set<string>();
+    for (const combo of usedCombinations) {
+      if (combo.colorLineId === toStr(selectedColor) && combo.productCapacityId) {
+        set.add(combo.productCapacityId);
+      }
+    }
+    return set;
+  }, [usedCombinations, selectedColor]);
+
+  const disabledColorIds = useMemo(() => {
+    if (!selectedCapacity) return new Set<string>();
+    const set = new Set<string>();
+    for (const combo of usedCombinations) {
+      if (combo.productCapacityId === toStr(selectedCapacity)) {
+        set.add(combo.colorLineId);
+      }
+    }
+    return set;
+  }, [usedCombinations, selectedCapacity]);
+
+  // Se trocar a cor e a capacidade atual ficar inválida, limpa a capacidade
+  useEffect(() => {
+    if (
+      selectedColor &&
+      selectedCapacity &&
+      disabledCapacityIds.has(toStr(selectedCapacity))
+    ) {
+      setSelectedCapacity(null);
+    }
+  }, [selectedColor, selectedCapacity, disabledCapacityIds]);
+
+  // Se trocar a capacidade e a cor atual ficar inválida, limpa a cor
+  useEffect(() => {
+    if (
+      selectedCapacity &&
+      selectedColor &&
+      disabledColorIds.has(toStr(selectedColor))
+    ) {
+      setSelectedColor("");
+    }
+  }, [selectedCapacity, selectedColor, disabledColorIds]);
+
+  // Funções de bloqueio (usam os sets acima)
   function isColorDisabled(colorId: string) {
-    return usedCombinations.some(
-      (c) =>
-        c.colorLineId === colorId && c.productCapacityId === selectedCapacity
-    );
+    if (!selectedCapacity) return false; // só bloqueia cor depois que tiver capacidade escolhida
+    return disabledColorIds.has(toStr(colorId));
   }
 
   function isCapacityDisabled(capId: string) {
-    return usedCombinations.some(
-      (c) => c.productCapacityId === capId && c.colorLineId === selectedColor
-    );
+    if (!selectedColor) return false; // só bloqueia capacidade depois que tiver cor escolhida
+    return disabledCapacityIds.has(toStr(capId));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (
-      !name ||
-      !description ||
-      !selectedCategory ||
-      !selectedLine ||
-      !selectedColor
-    ) {
+    if (!name || !description || !selectedCategory || !selectedLine || !selectedColor) {
       alert("Preencha todos os campos obrigatórios!");
+      return;
+    }
+
+    // Validação final: combinação já existente?
+    const willBlock =
+      selectedCapacity &&
+      usedCombinations.some(
+        (c) =>
+          c.colorLineId === toStr(selectedColor) &&
+          c.productCapacityId === toStr(selectedCapacity)
+      );
+    if (willBlock) {
+      alert("Essa combinação de Cor + Capacidade já existe nessa Categoria + Linha.");
       return;
     }
 
@@ -127,8 +209,7 @@ const ProductFormScreen = () => {
     formData.append("idCategory", selectedCategory);
     formData.append("idProductLine", selectedLine);
     formData.append("colorLineId", selectedColor);
-    if (selectedCapacity)
-      formData.append("productCapacityId", selectedCapacity);
+    if (selectedCapacity) formData.append("productCapacityId", selectedCapacity);
     formData.append("Dimensions", dimensions);
     formData.append("Materials", materials);
     formData.append("OtherFeatures", otherFeatures);
@@ -183,7 +264,8 @@ const ProductFormScreen = () => {
         <select
           value={selectedCategory}
           onChange={(e) => {
-            setSelectedCategory(e.target.value);
+            const v = toStr(e.target.value);
+            setSelectedCategory(v);
             setSelectedLine("");
             setSelectedColor("");
             setSelectedCapacity(null);
@@ -193,7 +275,7 @@ const ProductFormScreen = () => {
         >
           <option value="">Selecione uma categoria</option>
           {categories.map((c) => (
-            <option key={c.id} value={c.id}>
+            <option key={c.id} value={toStr(c.id)}>
               {c.name}
             </option>
           ))}
@@ -202,7 +284,8 @@ const ProductFormScreen = () => {
         <select
           value={selectedLine}
           onChange={(e) => {
-            setSelectedLine(e.target.value);
+            const v = toStr(e.target.value);
+            setSelectedLine(v);
             setSelectedColor("");
             setSelectedCapacity(null);
           }}
@@ -212,11 +295,9 @@ const ProductFormScreen = () => {
         >
           <option value="">Selecione uma linha</option>
           {lines
-            .filter(
-              (l) => !selectedCategory || l.idCategory === selectedCategory
-            )
+            .filter((l) => !selectedCategory || toStr(l.idCategory) === toStr(selectedCategory))
             .map((l) => (
-              <option key={l.id} value={l.id}>
+              <option key={l.id} value={toStr(l.id)}>
                 {l.name}
               </option>
             ))}
@@ -224,14 +305,14 @@ const ProductFormScreen = () => {
 
         <select
           value={selectedColor}
-          onChange={(e) => setSelectedColor(e.target.value)}
+          onChange={(e) => setSelectedColor(toStr(e.target.value))}
           className="border p-2 rounded-lg disabled:text-gray-300"
           required
           disabled={!selectedCategory || !selectedLine}
         >
           <option value="">Selecione uma cor</option>
           {colors.map((c) => (
-            <option key={c.id} value={c.id} disabled={isColorDisabled(c.id)}>
+            <option key={c.id} value={toStr(c.id)} disabled={isColorDisabled(toStr(c.id))}>
               {c.name}
             </option>
           ))}
@@ -239,13 +320,13 @@ const ProductFormScreen = () => {
 
         <select
           value={selectedCapacity || ""}
-          onChange={(e) => setSelectedCapacity(e.target.value)}
+          onChange={(e) => setSelectedCapacity(e.target.value ? toStr(e.target.value) : null)}
           className="border p-2 rounded-lg disabled:text-gray-300"
           disabled={!selectedCategory || !selectedLine}
         >
           <option value="">Selecione uma capacidade</option>
           {capacities.map((c) => (
-            <option key={c.id} value={c.id} disabled={isCapacityDisabled(c.id)}>
+            <option key={c.id} value={toStr(c.id)} disabled={isCapacityDisabled(toStr(c.id))}>
               {c.capacity}
             </option>
           ))}
@@ -317,6 +398,7 @@ const ProductFormScreen = () => {
           {id ? "Salvar Alterações" : "Criar Produto"}
         </button>
         <button
+          type="button"
           onClick={() => navigate("/product")}
           className="bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer"
         >
