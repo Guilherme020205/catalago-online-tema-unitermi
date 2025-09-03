@@ -87,11 +87,11 @@ const ScreenProductLines = () => {
   }, []);
 
   return (
-    <div className="flex flex-col m-20">
+    <div className="flex flex-col m-5 md:m-20">
       <p className="text-2xl font-bold select-none">Linhas de Produto</p>
 
       {/* Criar nova linha */}
-      <div className="flex flex-row gap-2 mt-6">
+      <div className="flex flex-col md:flex-row gap-2 mt-6">
         <input
           type="text"
           value={newLine}
@@ -126,10 +126,10 @@ const ScreenProductLines = () => {
         <section className="bg-web-gray rounded-2xl p-4">
           <ul>
             {lines.map((line: any) => (
-              <li key={line.id} className="w-[600px]">
+              <li key={line.id} className="w-80 md:w-[600px]">
                 <div className="flex justify-between w-full my-2">
                   {editId === line.id ? (
-                    <div className="flex gap-2 w-full">
+                    <div className="flex flex-col gap-2 w-full">
                       <input
                         type="text"
                         value={editValue}
