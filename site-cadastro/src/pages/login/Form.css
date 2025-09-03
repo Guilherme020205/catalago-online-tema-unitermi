@@ -1,3 +1,12 @@
+.formulario {
+  background: #ff7a8c;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 122, 140, 1) 0%,
+    rgba(143, 0, 19, 1) 100%
+  );
+}
+
 .inputGroup {
   font-family: "Segoe UI", sans-serif;
   margin-bottom: 10px;

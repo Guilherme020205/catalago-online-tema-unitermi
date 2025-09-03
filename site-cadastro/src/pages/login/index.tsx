@@ -10,7 +10,7 @@ const ScreenLogin = () => {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
-  const [isLoggingIn, setIsLoggingIn] = useState(false); 
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const ScreenLogin = () => {
     }
 
     try {
-      setIsLoggingIn(true);  
+      setIsLoggingIn(true);
       const response = await api.post("/login", {
         user,
         password,
@@ -38,19 +38,23 @@ const ScreenLogin = () => {
     } catch (error) {
       alert("Erro ao fazer login!");
     } finally {
-      setIsLoggingIn(false);  
+      setIsLoggingIn(false);
     }
   };
 
   return (
     <div className="flex flex-row w-full h-screen justify-center gap-20">
-      <div className="flex justify-center items-center w-full">
+      <div className="hidden lg:flex justify-center items-center w-full">
         <img src={logo} alt="logo" className="w-96 h-64" />
       </div>
 
       <div className="formulario w-full flex justify-center items-center">
         <div className="flex flex-col w-96">
-          <h2 className="text-white font-bold text-6xl mb-10">Bem-Vindo!</h2>
+          <h2 className="text-white font-bold text-6xl mb-5">Bem-Vindo!</h2>
+          <div className="lg:hidden flex justify-center items-center bg-white rounded-2xl p-2 w-full">
+            <img src={logo} alt="logo" className="w-52 h-32" />
+          </div>
+
           <form onSubmit={handleLogin} className="flex flex-col">
             <div className="inputGroup">
               <label htmlFor="user">Usuário:</label>
@@ -83,12 +87,12 @@ const ScreenLogin = () => {
 
             <button
               type="submit"
-              disabled={isLoggingIn} 
+              disabled={isLoggingIn}
               className={`cursor-pointer bg-white text-web-red my-5 py-5 px-36 rounded-2xl shadow-[2px_2px_7px_-2px_#ff0000] hover:bg-web-pink hover:shadow-[2px_2px_7px_-2px_#000] transition-all duration-700 ${
                 isLoggingIn ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              {isLoggingIn ? "Entrando..." : "Entrar"} 
+              {isLoggingIn ? "Entrando..." : "Entrar"}
             </button>
           </form>
         </div>
