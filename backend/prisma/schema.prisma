@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String   @id @default(uuid())
+  user     String   @unique
+  password String
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Category {
+  id       String   @id @default(uuid())
+  name     String   @unique
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  Product     Product[]
+  ProductLine ProductLine[]
+
+  @@map("category")
+}
+
+model ProductLine {
+  id   String @id @default(uuid())
+  name String @unique
+
+  Category   Category? @relation(fields: [idCategory], references: [id])
+  idCategory String
+
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
+  Product  Product[]
+
+  @@map("productLine")
+}
+
+model ProductCapacity {
+  id       String   @id @default(uuid())
+  capacity String   @unique
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  Product   Product[]
+
+  @@map("productCapacity")
+}
+
+model ColorLine {
+  id   String @id @default(uuid())
+  name String @unique
+  code String
+ 
+  
+  createAt          DateTime         @default(now())
+  updateAt          DateTime         @updatedAt
+  Product           Product[]
+
+  @@map("corLine")
+}
+
+model Product {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String
+  Category    Category? @relation(fields: [idCategory], references: [id])
+  idCategory  String
+
+  ProductLine   ProductLine? @relation(fields: [idProductLine], references: [id])
+  idProductLine String
+
+  ColorLine   ColorLine? @relation(fields: [colorLineId], references: [id])
+  colorLineId String?
+
+  ProductCapacity   ProductCapacity? @relation(fields: [productCapacityId], references: [id])
+  productCapacityId String?
+
+  Dimensions    String
+  Materials     String
+  OtherFeatures String
+  Weight        String
+  Code          String
+  NCM           String
+  EAN           String
+  Image         String
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@map("products")
+}

@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@theme {
+  --color-web-red: #a51a1d;
+  --color-web-pink: #ffe2e2;
+  --color-web-gray: #d9d9d9;
+}
+
+.buttonHome {
+  background-color: var(--color-web-gray);
+  color: black;
+  cursor: pointer;
+  border: 1px solid var(--color-web-red);
+  border-radius: 8px;
+  width: 200px;
+  padding: 10px; 
+}
+ 
