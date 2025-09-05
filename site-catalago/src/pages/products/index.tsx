@@ -94,27 +94,36 @@ function ScreenProducts() {
 
         <div>
           {products.length > 0 && (
-            <div className="flex flex-row justify-center items-center mt-10 gap-4">
+            <div className="mt-6 flex justify-center gap-2">
               <button
-                disabled={page === 1}
-                onClick={() => setPage(page - 1)}
-                className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50 disabled:cursor-no-drop cursor-pointer"
+                disabled={page <= 1}
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                className="px-3 py-1 border cursor-pointer rounded disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Anterior
               </button>
 
-              <span className="flex flex-col gap-0">
-                <p>Página</p>
-                <p>
-                  <strong>{page}</strong> de{" "}
-                  <strong>{pagination.totalPages}</strong>
-                </p>
-              </span>
+              {Array.from(
+                { length: pagination.totalPages },
+                (_, i) => i + 1
+              ).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPage(p)}
+                  className={`px-3 py-1 border cursor-pointer rounded ${
+                    p === page ? "bg-blue-500 text-white" : ""
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
 
               <button
-                disabled={page === pagination.totalPages}
-                onClick={() => setPage(page + 1)}
-                className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50 disabled:cursor-no-drop cursor-pointer"
+                disabled={page >= pagination.totalPages}
+                onClick={() =>
+                  setPage((prev) => Math.min(prev + 1, pagination.totalPages))
+                }
+                className="px-3 py-1 border rounded cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Próxima
               </button>
