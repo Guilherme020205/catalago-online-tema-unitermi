@@ -13,6 +13,7 @@ import ScreenProductLines from "./pages/ProductLines/index";
 import ProductFormScreen from "./pages/Product/CreatEditProduct";
 import ScreenProduct from "./pages/Product";
 import ScreenVacancys from "./pages/Vacancy";
+import VacancyFormScreen from "./pages/Vacancy/CreatEditVacancy";
 
 function App() {
   return (
@@ -94,6 +95,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ScreenVacancys />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create-vacancy"
+              element={
+                <ProtectedRoute>
+                  <VacancyFormScreen  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-vacancy/:id"
+              element={
+                <ProtectedRoute>
+                  <VacancyFormScreen  />
                 </ProtectedRoute>
               }
             />

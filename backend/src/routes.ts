@@ -75,7 +75,7 @@ router.get("/GetProductDetail/:id", new GetProductDetail().handle);
 router.post('/CreateVacancy', new CreateVacancy().handle)
 router.put('/EditVacancy/:id', new EditVacancy().handle)
 router.delete('/DeleteVacancy/:id', new DeleteVacancy().handle)
-router.get('/ListVacancys', new ListVacancys().handle)
+router.get('/ListVacancys/search', new ListVacancys().handle)
 router.get('/DetailVacancy/:id', new DetailVacancy().handle)
 
 export default router;

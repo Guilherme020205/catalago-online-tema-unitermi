@@ -19,8 +19,8 @@ class EditVacancy {
         data: {
           title,
           description: description.replace(/\r\n/g, "\n"),
-          requirements,
-          benefits,
+          requirements: requirements.replace(/\r\n/g, "\n"),
+          benefits: benefits.replace(/\r\n/g, "\n"),
           wage: Number(wage) || 0,
         },
       });
