@@ -10,6 +10,7 @@ function Header() {
     { path: "/", label: "Inicio" },
     { path: "/produtos", label: "Produtos" },
     { path: "/contatos", label: "Contatos" },
+    { path: "/vagas", label: "Vagas" },
   ];
 
   return (
