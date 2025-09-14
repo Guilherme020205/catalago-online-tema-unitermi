@@ -72,9 +72,9 @@ router.get("/products/search", new ListProductsByName().handle);
 router.get("/listProductsSuggestions", new ListProductsSuggestions().handle);
 router.get("/GetProductDetail/:id", new GetProductDetail().handle);
 
-router.post('/CreateVacancy', new CreateVacancy().handle)
-router.put('/EditVacancy/:id', new EditVacancy().handle)
-router.delete('/DeleteVacancy/:id', new DeleteVacancy().handle)
+router.post('/CreateVacancy', authentcate, new CreateVacancy().handle)
+router.put('/EditVacancy/:id', authentcate, new EditVacancy().handle)
+router.delete('/DeleteVacancy/:id', authentcate, new DeleteVacancy().handle)
 router.get('/ListVacancys/search', new ListVacancys().handle)
 router.get('/DetailVacancy/:id', new DetailVacancy().handle)
 
