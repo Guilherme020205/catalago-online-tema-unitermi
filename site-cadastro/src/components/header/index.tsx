@@ -22,7 +22,7 @@ function Header() {
         className="flex flex-row items-center gap-1 text-web-red hover:text-red-600 transition-all duration-700  cursor-pointer"
       >
         <RiLogoutCircleFill className="text-3xl" />
-        <p className="text-xs md:text-xl">Sair do <p>sistema</p></p>
+        <p className="text-xs md:text-xl">Sair do sistema </p>
       </button>
     </div>
   );

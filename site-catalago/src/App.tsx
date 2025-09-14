@@ -4,13 +4,14 @@ import ScreenHome from "./pages/home";
 import ScreenProducts from "./pages/products";
 import ScreenContact from "./pages/contact";
 import ScreenProduct from "./pages/products/product";
+import ScreenVacantys from "./pages/Vacantys";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route element={<HeaderWithLayout />}>
-          <Route path="/" element={<ScreenHome />} />
+          <Route path="/*" element={<ScreenHome />} />
         </Route>
         <Route element={<HeaderWithLayout />}>
           <Route path="/produtos" element={<ScreenProducts />} />
@@ -20,6 +21,9 @@ function App() {
         </Route>
         <Route element={<HeaderWithLayout />}>
           <Route path="/contatos" element={<ScreenContact />} />
+        </Route>
+        <Route element={<HeaderWithLayout />}>
+          <Route path="/vagas" element={<ScreenVacantys />} />
         </Route>
       </Routes>
     </Router>

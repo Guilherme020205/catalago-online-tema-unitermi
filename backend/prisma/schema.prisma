@@ -55,7 +55,7 @@ model ProductCapacity {
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
 
-  Product   Product[]
+  Product Product[]
 
   @@map("productCapacity")
 }
@@ -64,11 +64,10 @@ model ColorLine {
   id   String @id @default(uuid())
   name String @unique
   code String
- 
-  
-  createAt          DateTime         @default(now())
-  updateAt          DateTime         @updatedAt
-  Product           Product[]
+
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
+  Product  Product[]
 
   @@map("corLine")
 }
@@ -102,4 +101,17 @@ model Product {
   updateAt DateTime @updatedAt
 
   @@map("products")
+}
+
+model Vacancy {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  requirements String
+  benefits     String
+  wage         Int
+  createAt     DateTime @default(now())
+  updateAt     DateTime @updatedAt
+
+  @@map("vacancys")
 }

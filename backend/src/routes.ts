@@ -32,6 +32,11 @@ import { ListProductsSuggestions } from "./Controllers/Produto/web/ListProductsS
 import { GetProductDetail } from "./Controllers/Produto/web/GetProductDetail";
 import upload from "./config/multer";
 import { ListProductsByName } from "./Controllers/Produto/ListProductsFilters";
+import { CreateVacancy } from "./Controllers/WorkWithUs/CreateVacancy";
+import { EditVacancy } from "./Controllers/WorkWithUs/EditVacancy";
+import { DeleteVacancy } from "./Controllers/WorkWithUs/DeleteVacancy"; 
+import { DetailVacancy } from "./Controllers/WorkWithUs/DetailVacancy";
+import { ListVacancys } from "./Controllers/WorkWithUs/ListVacancys";
  
 const router = Router();
 
@@ -66,5 +71,11 @@ router.get("/products/search", new ListProductsByName().handle);
 
 router.get("/listProductsSuggestions", new ListProductsSuggestions().handle);
 router.get("/GetProductDetail/:id", new GetProductDetail().handle);
+
+router.post('/CreateVacancy', authentcate, new CreateVacancy().handle)
+router.put('/EditVacancy/:id', authentcate, new EditVacancy().handle)
+router.delete('/DeleteVacancy/:id', authentcate, new DeleteVacancy().handle)
+router.get('/ListVacancys/search', new ListVacancys().handle)
+router.get('/DetailVacancy/:id', new DetailVacancy().handle)
 
 export default router;

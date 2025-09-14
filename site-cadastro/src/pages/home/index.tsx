@@ -27,6 +27,9 @@ const ScreenHome = () => {
         <button onClick={() => navigate("/product")} className="buttonHome select-none">
           Produtos
         </button>
+        <button onClick={() => navigate("/vagas")} className="buttonHome select-none">
+          Vagas
+        </button>
       </div>
     </div>
   );
