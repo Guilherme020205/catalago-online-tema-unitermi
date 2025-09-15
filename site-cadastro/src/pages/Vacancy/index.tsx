@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../service/api";
 import { IoTrashBin } from "react-icons/io5";
 import { FaPencil } from "react-icons/fa6";
+import LoadingPulse from "../../components/loadings/loadingPulse";
 
 interface Vacancy {
   id: string;
@@ -15,6 +16,7 @@ interface Vacancy {
 }
 
 const ScreenVacancy = () => {
+  const [loading, setLoading] = useState(false);
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -23,6 +25,8 @@ const ScreenVacancy = () => {
   const limit = 30;
 
   async function getVacancies() {
+    setLoading(true);
+
     try {
       const response = await api.get("/ListVacancys/search", {
         params: { title: search, page, limit },
@@ -32,18 +36,23 @@ const ScreenVacancy = () => {
     } catch (error: any) {
       console.error(error);
       alert("Erro ao buscar vagas");
+    } finally {
+      setLoading(false);
     }
   }
 
   async function deleteVacancy(id: string) {
     const confirmDelete = window.confirm("Deseja excluir esta vaga?");
     if (!confirmDelete) return;
+    setLoading(true);
 
     try {
       await api.delete(`/DeleteVacancy/${id}`);
       getVacancies();
     } catch (error: any) {
       alert(error.response?.data?.message || "Erro ao deletar vaga");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -83,47 +92,57 @@ const ScreenVacancy = () => {
       </div>
 
       <ul>
-        {vacancies.map((vacancy) => (
-          <details
-            key={vacancy.id}
-            className="flex flex-col gap-4 my-2 p-4 border rounded-lg"
-          >
-            <summary className="font-bold text-xl">{vacancy.title}</summary>
-            <div>
-              <div className="whitespace-pre-wrap break-words mt-2 text-gray-700">
-                <p className="font-bold">Descrição:</p>
-                <p>{vacancy.description}</p>
-              </div>
-              <div className="whitespace-pre-wrap break-words mt-2 text-gray-700">
-                <p className="font-bold">Requisitos:</p>
-                <p>{vacancy.requirements}</p>
-              </div>
-              <div className="whitespace-pre-wrap break-words mt-2 text-gray-700">
-                <p className="font-bold">Benefícios:</p>
-                <p>{vacancy.benefits}</p>
-              </div>
-              <div className="whitespace-pre-wrap break-words mt-2 text-gray-700">
-                <p className="font-bold">Salário:</p>
-                <p>{vacancy.wage}</p>
-              </div>
-            </div>
+        {loading ? (
+          <LoadingPulse />
+        ) : vacancies.length === 0 ? (
+          <p className="text-gray-500 text-lg">
+            Nenhuma vaga encontrado.
+          </p>
+        ) : (
+          <div>
+            {vacancies.map((vacancy) => (
+              <details
+                key={vacancy.id}
+                className="flex flex-col gap-4 my-2 p-4 border rounded-lg"
+              >
+                <summary className="font-bold text-xl">{vacancy.title}</summary>
+                <div>
+                  <div className="whitespace-pre-wrap break-words mt-2 text-gray-700">
+                    <p className="font-bold">Descrição:</p>
+                    <p>{vacancy.description}</p>
+                  </div>
+                  <div className="whitespace-pre-wrap break-words mt-2 text-gray-700">
+                    <p className="font-bold">Requisitos:</p>
+                    <p>{vacancy.requirements}</p>
+                  </div>
+                  <div className="whitespace-pre-wrap break-words mt-2 text-gray-700">
+                    <p className="font-bold">Benefícios:</p>
+                    <p>{vacancy.benefits}</p>
+                  </div>
+                  <div className="whitespace-pre-wrap break-words mt-2 text-gray-700">
+                    <p className="font-bold">Salário:</p>
+                    <p>{vacancy.wage}</p>
+                  </div>
+                </div>
 
-            <div className="flex gap-5 mt-10 p-5 items-center">
-              <button
-                onClick={() => navigate(`/edit-vacancy/${vacancy.id}`)}
-                className="text-blue-500 cursor-pointer"
-              >
-                <FaPencil />
-              </button>
-              <button
-                onClick={() => deleteVacancy(vacancy.id)}
-                className="text-red-500 cursor-pointer"
-              >
-                <IoTrashBin />
-              </button>
-            </div>
-          </details>
-        ))}
+                <div className="flex gap-5 mt-10 p-5 items-center">
+                  <button
+                    onClick={() => navigate(`/edit-vacancy/${vacancy.id}`)}
+                    className="text-blue-500 cursor-pointer"
+                  >
+                    <FaPencil />
+                  </button>
+                  <button
+                    onClick={() => deleteVacancy(vacancy.id)}
+                    className="text-red-500 cursor-pointer"
+                  >
+                    <IoTrashBin />
+                  </button>
+                </div>
+              </details>
+            ))}
+          </div>
+        )}
       </ul>
 
       <div className="mt-6 flex justify-center gap-2">

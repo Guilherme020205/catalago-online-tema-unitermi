@@ -1,11 +1,11 @@
- import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../../../service/api";
 
 const VacancyFormScreen = () => {
   const { id } = useParams(); // id da vaga (para edição)
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   // Estados dos campos da vaga
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -33,13 +33,13 @@ const VacancyFormScreen = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    setLoading(true);
     if (!title || !description || !requirements || !benefits || !wage) {
       alert("Preencha todos os campos obrigatórios!");
       return;
     }
 
     const payload = { title, description, requirements, benefits, wage };
-
     try {
       if (id) {
         await api.put(`/EditVacancy/${id}`, payload);
@@ -49,6 +49,8 @@ const VacancyFormScreen = () => {
       navigate("/vagas"); // Redireciona para a lista de vagas
     } catch (error: any) {
       alert(error.response?.data?.message || "Erro ao salvar vaga");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -105,14 +107,18 @@ const VacancyFormScreen = () => {
         <div className="flex gap-2">
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer"
+            className={` text-white px-4 py-2 rounded-lg cursor-pointer ${
+              loading ? "bg-blue-300" : "bg-blue-500"
+            }`}
           >
             {id ? "Salvar Alterações" : "Criar Vaga"}
           </button>
           <button
             type="button"
             onClick={() => navigate("/vagas")}
-            className="bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer"
+            className={` text-white px-4 py-2 rounded-lg cursor-pointer ${
+              loading ? "bg-gray-300" : "bg-gray-500"
+            }`}
           >
             Cancelar
           </button>

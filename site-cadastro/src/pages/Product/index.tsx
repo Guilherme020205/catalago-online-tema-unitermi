@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../service/api";
 import { IoTrashBin } from "react-icons/io5";
 import { FaPencil } from "react-icons/fa6";
+import LoadingPulse from "../../components/loadings/loadingPulse";
 
 interface Product {
   id: string;
@@ -23,7 +24,10 @@ const ScreenProduct = () => {
   const navigate = useNavigate();
   const limit = 30;
 
+  const [loading, setLoading] = useState(false);
+
   async function getProducts() {
+    setLoading(true);
     try {
       const response = await api.get("/products/search", {
         params: {
@@ -37,18 +41,23 @@ const ScreenProduct = () => {
     } catch (error: any) {
       console.error(error);
       alert("Erro ao buscar produtos");
+    } finally {
+      setLoading(false);
     }
   }
 
   async function deleteProduct(id: string) {
     const confirmDelete = window.confirm("Deseja excluir este produto?");
     if (!confirmDelete) return;
-
+    
+    setLoading(true);
     try {
       await api.delete(`/deleteProduct/${id}`);
       getProducts();
     } catch (error: any) {
       alert(error.response?.data?.message || "Erro ao deletar produto");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -88,45 +97,56 @@ const ScreenProduct = () => {
       </div>
 
       <ul>
-        {products.map((product) => (
-          <li
-            key={product.id}
-            className="flex flex-row gap-4 justify-between my-2 p-2 border rounded-lg break-all"
-          >
-            <div className="flex gap-4">
-              {product.Image && (
-                <img
-                  src={product.Image}
-                  alt={product.name}
-                  className="w-20 h-20 object-cover rounded"
-                />
-              )}
-              <div>
-                <p className="font-bold">{product.name}</p>
-                <p>{product.description}</p>
-                <p className="text-sm text-gray-500">
-                  Categoria: {product.Category?.name} | Linha:{" "}
-                  {product.ProductLine?.name} | Cor: {product.ColorLine?.name} |
-                  Capacidade: {product.ProductCapacity?.capacity || "—"}
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-5 mt-5 items-start">
-              <button
-                onClick={() => navigate(`/edit-product/${product.id}`)}
-                className="text-blue-500 cursor-pointer"
+        {loading ? (
+          <LoadingPulse />
+        ) : products.length === 0 ? (
+          <p className="text-gray-500 text-lg">
+            Nenhum produto encontrado.
+          </p>
+        ) : (
+          <div>
+            {products.map((product) => (
+              <li
+                key={product.id}
+                className="flex flex-row gap-4 justify-between my-2 p-2 border rounded-lg break-all"
               >
-                <FaPencil />
-              </button>
-              <button
-                onClick={() => deleteProduct(product.id)}
-                className="text-red-500 cursor-pointer"
-              >
-                <IoTrashBin />
-              </button>
-            </div>
-          </li>
-        ))}
+                <div className="flex gap-4">
+                  {product.Image && (
+                    <img
+                      src={product.Image}
+                      alt={product.name}
+                      className="w-20 h-20 object-cover rounded"
+                    />
+                  )}
+                  <div>
+                    <p className="font-bold">{product.name}</p>
+                    <p>{product.description}</p>
+                    <p className="text-sm text-gray-500">
+                      Categoria: {product.Category?.name} | Linha:{" "}
+                      {product.ProductLine?.name} | Cor:{" "}
+                      {product.ColorLine?.name} | Capacidade:{" "}
+                      {product.ProductCapacity?.capacity || "—"}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-5 mt-5 items-start">
+                  <button
+                    onClick={() => navigate(`/edit-product/${product.id}`)}
+                    className="text-blue-500 cursor-pointer"
+                  >
+                    <FaPencil />
+                  </button>
+                  <button
+                    onClick={() => deleteProduct(product.id)}
+                    className="text-red-500 cursor-pointer"
+                  >
+                    <IoTrashBin />
+                  </button>
+                </div>
+              </li>
+            ))}
+          </div>
+        )}
       </ul>
 
       <div className="mt-6 flex justify-center gap-2">

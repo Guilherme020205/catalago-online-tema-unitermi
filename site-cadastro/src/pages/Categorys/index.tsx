@@ -2,16 +2,26 @@ import { api } from "../../service/api";
 import { IoTrashBin } from "react-icons/io5";
 import { FaPencil } from "react-icons/fa6";
 import { useEffect, useState } from "react";
+import LoadingPulse from "../../components/loadings/loadingPulse";
 
 const ScreenCategorys = () => {
+  const [loading, setLoading] = useState(false);
+
   const [categorias, setCategorias] = useState<any[]>([]);
   const [nameCategoria, setNameCategoria] = useState("");
   const [editId, setEditId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
 
   async function getCategorys() {
+    setLoading(true);
     const response = await api.get("/listCategory");
-    setCategorias(response.data.Categorys);
+    try {
+      setCategorias(response.data.Categorys);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function createCategory() {
@@ -79,57 +89,67 @@ const ScreenCategorys = () => {
       <div className="flex flex-row justify-between mt-10">
         <section className="bg-web-gray rounded-2xl p-4">
           <ul>
-            {categorias.map((categoria: any) => (
-              <li key={categoria.id} className="w-80 md:w-[600px]">
-                <div className="flex justify-between w-full my-2">
-                  {editId === categoria.id ? (
-                    <div className="flex flex-col gap-2 w-full">
-                      <input
-                        type="text"
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                        className="border p-1 rounded-lg flex-1"
-                      />
-                      <button
-                        onClick={saveEdit}
-                        className="bg-green-500 text-white px-3 py-1 rounded-lg cursor-pointer"
-                      >
-                        Salvar
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditId(null);
-                          setEditName("");
-                        }} // Cancela a edição
-                        className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
-                      >
-                        Cancelar
-                      </button>
+            {loading ? (
+              <LoadingPulse />
+            ) : categorias.length === 0 ? (
+              <p className="text-gray-500 text-lg">
+                Nenhuma categoria encontrada.
+              </p>
+            ) : (
+              <div>
+                {categorias.map((categoria: any) => (
+                  <li key={categoria.id} className="w-80 md:w-[600px]">
+                    <div className="flex justify-between w-full my-2">
+                      {editId === categoria.id ? (
+                        <div className="flex flex-col gap-2 w-full">
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            className="border p-1 rounded-lg flex-1"
+                          />
+                          <button
+                            onClick={saveEdit}
+                            className="bg-green-500 text-white px-3 py-1 rounded-lg cursor-pointer"
+                          >
+                            Salvar
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditId(null);
+                              setEditName("");
+                            }} // Cancela a edição
+                            className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      ) : (
+                        // Modo normal
+                        <>
+                          <p>{categoria.name}</p>
+                          <div className="flex flex-row items-center gap-5">
+                            <button
+                              onClick={() => startEdit(categoria)}
+                              className="cursor-pointer text-blue-500"
+                            >
+                              <FaPencil />
+                            </button>
+                            <button
+                              onClick={() => deleteCategory(categoria.id)}
+                              className="cursor-pointer text-red-500"
+                            >
+                              <IoTrashBin />
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
-                  ) : (
-                    // Modo normal
-                    <>
-                      <p>{categoria.name}</p>
-                      <div className="flex flex-row items-center gap-5">
-                        <button
-                          onClick={() => startEdit(categoria)}
-                          className="cursor-pointer text-blue-500"
-                        >
-                          <FaPencil />
-                        </button>
-                        <button
-                          onClick={() => deleteCategory(categoria.id)}
-                          className="cursor-pointer text-red-500"
-                        >
-                          <IoTrashBin />
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-                <hr />
-              </li>
-            ))}
+                    <hr />
+                  </li>
+                ))}
+              </div>
+            )}
           </ul>
         </section>
       </div>
