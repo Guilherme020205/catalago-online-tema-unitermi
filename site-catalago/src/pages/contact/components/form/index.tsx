@@ -3,18 +3,23 @@ import { useState } from "react";
 import emailjs from "@emailjs/browser";
 import ReCAPTCHA from "react-google-recaptcha";
 import "./FormContact.css";
+import { useLocation } from "react-router-dom";
 
 function FormContact() {
+  const location = useLocation();
+  const subjectFromVacancy =
+    (location.state as { subject?: string })?.subject || "";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [tel, setTel] = useState("");
   const [cnpj, setCnpj] = useState("");
   const [uf, setUf] = useState("");
   const [cidade, setCidade] = useState("");
-  const [subject, setSubject] = useState("");
+  const [subject, setSubject] = useState(subjectFromVacancy);
+
   const [mensagem, setMensagem] = useState("");
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
-  const [isSending, setIsSending] = useState(false);  
+  const [isSending, setIsSending] = useState(false);
 
   async function sendEmail(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,7 +45,7 @@ function FormContact() {
     };
 
     try {
-      setIsSending(true); 
+      setIsSending(true);
       const response = await emailjs.send(
         "service_t8ht1ut",
         "template_mhkuela",
@@ -65,7 +70,7 @@ function FormContact() {
       console.log(err);
       toast.error("Erro ao enviar o email.");
     } finally {
-      setIsSending(false); 
+      setIsSending(false);
     }
   }
 
@@ -84,7 +89,7 @@ function FormContact() {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <label htmlFor="name">Name</label>
+          <label htmlFor="name">Nome</label>
         </div>
 
         <div className="inputGroup ">
@@ -119,7 +124,7 @@ function FormContact() {
             value={cnpj}
             onChange={(e) => setCnpj(e.target.value)}
           />
-          <label htmlFor="cnpj">CNPJ</label>
+          <label htmlFor="cnpj">CNPJ / CPF</label>
         </div>
 
         <div className="inputGroup ">

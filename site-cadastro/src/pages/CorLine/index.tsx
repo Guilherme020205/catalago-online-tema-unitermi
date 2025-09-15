@@ -2,8 +2,11 @@ import { api } from "../../service/api";
 import { IoTrashBin } from "react-icons/io5";
 import { FaPencil } from "react-icons/fa6";
 import { useEffect, useState } from "react";
+import LoadingPulse from "../../components/loadings/loadingPulse";
 
 const ScreenCorLine = () => {
+  const [loading, setLoading] = useState(false);
+
   const [colors, setColors] = useState<any[]>([]);
   const [nameColor, setNameColor] = useState("");
   const [codeColor, setCodeColor] = useState("");
@@ -12,8 +15,15 @@ const ScreenCorLine = () => {
   const [editCode, setEditCode] = useState("");
 
   async function getColors() {
+    setLoading(true);
     const response = await api.get("/listColorLine");
-    setColors(response.data.colorLines);
+    try {
+      setColors(response.data.colorLines);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function createColor() {
@@ -92,70 +102,80 @@ const ScreenCorLine = () => {
       <div className="flex flex-row justify-between mt-10">
         <section className="bg-web-gray rounded-2xl p-4">
           <ul>
-            {colors.map((color: any) => (
-              <li key={color.id} className="w-80 md:w-[600px]">
-                <div className="flex justify-between items-center w-full my-2">
-                  {editId === color.id ? (
-                    <div className="flex flex-col gap-2 w-full">
-                      <input
-                        type="text"
-                        value={editName}
-                        onChange={(e) => setEditName(e.target.value)}
-                        className="border p-1 rounded-lg flex-1"
-                      />
-                      <input
-                        type="text"
-                        value={editCode}
-                        onChange={(e) => setEditCode(e.target.value)}
-                        className="border p-1 rounded-lg flex-1"
-                      />
-                      <button
-                        onClick={saveEdit}
-                        className="bg-green-500 text-white px-3 py-1 rounded-lg cursor-pointer"
-                      >
-                        Salvar
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditId(null);
-                          setEditName("");
-                          setEditCode("");
-                        }}
-                        className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
-                      >
-                        Cancelar
-                      </button>
+            {loading ? (
+              <LoadingPulse />
+            ) : colors.length === 0 ? (
+              <p className="text-gray-500 text-lg">Nenhuma cor encontrada.</p>
+            ) : (
+              <div>
+                {colors.map((color: any) => (
+                  <li key={color.id} className="w-80 md:w-[600px]">
+                    <div className="flex justify-between items-center w-full my-2">
+                      {editId === color.id ? (
+                        <div className="flex flex-col gap-2 w-full">
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            className="border p-1 rounded-lg flex-1"
+                          />
+                          <input
+                            type="text"
+                            value={editCode}
+                            onChange={(e) => setEditCode(e.target.value)}
+                            className="border p-1 rounded-lg flex-1"
+                          />
+                          <button
+                            onClick={saveEdit}
+                            className="bg-green-500 text-white px-3 py-1 rounded-lg cursor-pointer"
+                          >
+                            Salvar
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditId(null);
+                              setEditName("");
+                              setEditCode("");
+                            }}
+                            className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex flex-row gap-4 items-center">
+                            <p>{color.name}</p>
+                            <div
+                              className="w-6 h-6 rounded-full border"
+                              style={{ backgroundColor: color.code }}
+                            ></div>
+                            <p className="text-sm text-gray-600">
+                              {color.code}
+                            </p>
+                          </div>
+                          <div className="flex flex-row items-center gap-5">
+                            <button
+                              onClick={() => startEdit(color)}
+                              className="cursor-pointer text-blue-500"
+                            >
+                              <FaPencil />
+                            </button>
+                            <button
+                              onClick={() => deleteColor(color.id)}
+                              className="cursor-pointer text-red-500"
+                            >
+                              <IoTrashBin />
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
-                  ) : (
-                    <>
-                      <div className="flex flex-row gap-4 items-center">
-                        <p>{color.name}</p>
-                        <div
-                          className="w-6 h-6 rounded-full border"
-                          style={{ backgroundColor: color.code }}
-                        ></div>
-                        <p className="text-sm text-gray-600">{color.code}</p>
-                      </div>
-                      <div className="flex flex-row items-center gap-5">
-                        <button
-                          onClick={() => startEdit(color)}
-                          className="cursor-pointer text-blue-500"
-                        >
-                          <FaPencil />
-                        </button>
-                        <button
-                          onClick={() => deleteColor(color.id)}
-                          className="cursor-pointer text-red-500"
-                        >
-                          <IoTrashBin />
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-                <hr />
-              </li>
-            ))}
+                    <hr />
+                  </li>
+                ))}
+              </div>
+            )}
           </ul>
         </section>
       </div>

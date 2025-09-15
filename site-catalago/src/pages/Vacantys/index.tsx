@@ -99,7 +99,9 @@ function ScreenVacantys() {
                 <p>Enviar o curriculo pelo formulario de contato!</p>
                 <p>Escrever no campo "Assunto" o titulo da vaga</p>
                 <button
-                  onClick={() => navigate("/contatos")}
+                  onClick={() =>
+                    navigate("/contatos", { state: { subject: vacancy.title } })
+                  }
                   className="bg-web-pink px-8 py-2 mt-2 rounded-2xl cursor-pointer hover:font-bold transition-all duration-700"
                 >
                   Contato

@@ -2,16 +2,25 @@ import { api } from "../../service/api";
 import { IoTrashBin } from "react-icons/io5";
 import { FaPencil } from "react-icons/fa6";
 import { useEffect, useState } from "react";
+import LoadingPulse from "../../components/loadings/loadingPulse";
 
 const ScreenProductCapacity = () => {
   const [capacities, setCapacities] = useState<any[]>([]);
   const [newCapacity, setNewCapacity] = useState("");
   const [editId, setEditId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function getCapacities() {
+    setLoading(true);
     const response = await api.get("/listProductCapacity");
-    setCapacities(response.data.productCapacitys);
+    try {
+      setCapacities(response.data.productCapacitys);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function createCapacity() {
@@ -75,56 +84,66 @@ const ScreenProductCapacity = () => {
       <div className="flex flex-row justify-between mt-10">
         <section className="bg-web-gray rounded-2xl p-4">
           <ul>
-            {capacities.map((capacity: any) => (
-              <li key={capacity.id} className="w-80 md:w-[600px]">
-                <div className="flex justify-between w-full my-2">
-                  {editId === capacity.id ? (
-                    <div className="flex flex-col gap-2 w-full">
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        className="border p-1 rounded-lg flex-1"
-                      />
-                      <button
-                        onClick={saveEdit}
-                        className="bg-green-500 text-white px-3 py-1 rounded-lg cursor-pointer"
-                      >
-                        Salvar
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditId(null);
-                          setEditValue("");
-                        }}
-                        className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  ) : (
-                    <>
-                      <p>{capacity.capacity}</p>
-                      <div className="flex flex-row items-center gap-5">
+            {loading ? (
+          <LoadingPulse/>
+        ) :  capacities.length === 0 ? (
+           <p className="text-gray-500 text-lg">
+              Nenhuma capacidade encontrado.
+            </p>
+        ) :( 
+            <div>
+              {capacities.map((capacity: any) => (
+                <li key={capacity.id} className="w-80 md:w-[600px]">
+                  <div className="flex justify-between w-full my-2">
+                    {editId === capacity.id ? (
+                      <div className="flex flex-col gap-2 w-full">
+                        <input
+                          type="text"
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          className="border p-1 rounded-lg flex-1"
+                        />
                         <button
-                          onClick={() => startEdit(capacity)}
-                          className="cursor-pointer text-blue-500"
+                          onClick={saveEdit}
+                          className="bg-green-500 text-white px-3 py-1 rounded-lg cursor-pointer"
                         >
-                          <FaPencil />
+                          Salvar
                         </button>
                         <button
-                          onClick={() => deleteCapacity(capacity.id)}
-                          className="cursor-pointer text-red-500"
+                          onClick={() => {
+                            setEditId(null);
+                            setEditValue("");
+                          }}
+                          className="bg-gray-400 text-white px-3 py-1 rounded-lg cursor-pointer"
                         >
-                          <IoTrashBin />
+                          Cancelar
                         </button>
                       </div>
-                    </>
-                  )}
-                </div>
-                <hr />
-              </li>
-            ))}
+                    ) : (
+                      <>
+                        <p>{capacity.capacity}</p>
+                        <div className="flex flex-row items-center gap-5">
+                          <button
+                            onClick={() => startEdit(capacity)}
+                            className="cursor-pointer text-blue-500"
+                          >
+                            <FaPencil />
+                          </button>
+                          <button
+                            onClick={() => deleteCapacity(capacity.id)}
+                            className="cursor-pointer text-red-500"
+                          >
+                            <IoTrashBin />
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <hr />
+                </li>
+              ))}
+            </div>
+            )}
           </ul>
         </section>
       </div>

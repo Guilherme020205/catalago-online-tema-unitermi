@@ -12,10 +12,11 @@ function ScreenProducts() {
   const [pagination, setPagination] = useState({ totalPages: 1 });
 
   // estados de loading
-  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState(false);
 
   const listCategory = async () => {
+    setLoadingCategories(true); 
     try {
       const response = await api.get("/listCategory");
       setCategorys(response.data.Categorys);
@@ -25,7 +26,7 @@ function ScreenProducts() {
     } catch (error) {
       console.error(error);
     } finally {
-      setLoadingCategories(false); // finaliza loading
+      setLoadingCategories(false);
     }
   };
 

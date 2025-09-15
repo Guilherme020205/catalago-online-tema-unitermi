@@ -145,7 +145,7 @@ const ProductFormScreen = () => {
       alert("Preencha todos os campos obrigatórios!");
       return;
     }
-
+    setLoading(true);
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
@@ -176,8 +176,13 @@ const ProductFormScreen = () => {
       navigate("/product");
     } catch (error: any) {
       alert(error.response?.data?.message || "Erro ao salvar produto");
+    }finally {
+      setLoading(false);  
     }
+
   }
+
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="flex flex-col m-20">
@@ -345,13 +350,15 @@ const ProductFormScreen = () => {
         {/* Botões */}
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg cursor-pointer"
+          disabled={loading}
+          className={` text-white px-4 py-2 rounded-lg cursor-pointer ${loading ? 'bg-blue-300': 'bg-blue-500'}`}
         >
           {id ? "Salvar Alterações" : "Criar Produto"}
         </button>
         <button
           onClick={() => navigate("/product")}
-          className="bg-gray-500 text-white px-4 py-2 rounded-lg cursor-pointer"
+          disabled={loading} 
+          className={` text-white px-4 py-2 rounded-lg cursor-pointer ${loading ? 'bg-gray-300': 'bg-gray-500'}`}
         >
           Cancelar
         </button>
